@@ -1,0 +1,19 @@
+<div class="container"
+     fxLayout
+     fxLayout.xs="column"
+     fxLayoutAlign="center"
+     fxLayoutGap="10px"
+     fxLayoutGap.xs="0">
+  <div fxFlex="20%" fxFlex.xs="0">&nbsp;</div>
+  <div fxFlex="20%" fxFlex.xs="0" fxFlexOrder="3">&nbsp;</div>
+  <div fxFlex="60%" class="text-center">
+    <img src="assets/images/404.png" class="img-responsive mrg-top-50 animation-slide-in-up"/>
+    <div class="ts-clearfix">&nbsp;</div>
+    <a [routerLink]="backUrl">
+      <button mat-flat-button>
+        <mat-icon>arrow_back</mat-icon>
+        Go Back
+      </button>
+    </a>
+  </div>
+</div>

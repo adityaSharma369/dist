@@ -1,0 +1,40 @@
+<mat-nav-list tsMenuAccordion class="navigation">
+  <ng-container *ngFor="let menuItem of menuService.getAll()">
+    <mat-list-item tsMenuAccordionLink>
+      <a tsMenuAccordionToggle class="relative" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+         routerLink="{{menuItem.state}}" *ngIf="menuItem.type === 'link'">
+        <mat-icon>{{ menuItem.icon }}</mat-icon>&nbsp;
+        <span>{{ menuItem.name }}</span>
+        <span fxFlex></span>
+        <span class="menu-badge mat-{{ badge.type }}" *ngFor="let badge of menuItem.badge">{{ badge.value }}</span>
+      </a>
+      <a tsMenuAccordionToggle class="relative" href="{{menuItem.state}}" *ngIf="menuItem.type === 'extLink'">
+        <mat-icon>{{ menuItem.icon }}</mat-icon>&nbsp;
+        <span>{{ menuItem.name }}</span>
+        <span fxFlex></span>
+        <span class="menu-badge mat-{{ badge.type }}" *ngFor="let badge of menuItem.badge">{{ badge.value }}</span>
+      </a>
+      <a tsMenuAccordionToggle class="relative" href="{{menuItem.state}}" target="_blank"
+         *ngIf="menuItem.type === 'extTabLink'">
+        <mat-icon>{{ menuItem.icon }}</mat-icon>
+        <span>{{ menuItem.name }}</span>
+        <span fxFlex></span>
+        <span class="menu-badge mat-{{ badge.type }}" *ngFor="let badge of menuItem.badge">{{ badge.value }}</span>
+      </a>
+      <a tsMenuAccordionToggle class="relative" *ngIf="menuItem.type === 'sub'">
+        <mat-icon>{{ menuItem.icon }}</mat-icon>
+        <span>{{ menuItem.name }}</span>
+        <span fxFlex></span>
+        <span class="menu-badge mat-{{ badge.type }}" *ngFor="let badge of menuItem.badge">{{ badge.value }}</span>
+        <mat-icon class="menu-caret">arrow_drop_down</mat-icon>
+      </a>
+      <mat-nav-list class="sub-menu" *ngIf="menuItem.type === 'sub'">
+        <mat-list-item *ngFor="let childItem of menuItem.children" routerLinkActive="open">
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+             [routerLink]="['/', menuItem.state, childItem.state ]"
+             class="relative">{{ childItem.name }}</a>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-list-item>
+  </ng-container>
+</mat-nav-list>

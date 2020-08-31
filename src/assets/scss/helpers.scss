@@ -1,0 +1,151 @@
+// padding, margin, width, height helpers --> Start
+$sizes: (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 75, 80, 85, 90, 95, 100); // Adjust this to include the pixel amounts you need.
+$sides: (top, bottom, left, right); // Leave this variable alone
+
+@each $space in $sizes {
+  // in percentage // usage .height-{percentage}
+  .height-#{$space} {
+    height: #{$space}+ '%';
+  }
+  // in percentage // usage .width-{percentage}
+  .width-#{$space} {
+    width: #{$space}+ '%';
+  }
+
+  // in percentage // usage .min-height-{percentage}
+  .min-height-#{$space} {
+    min-height: #{$space}+ '%' !important;
+  }
+  // in percentage // usage .min-width-{percentage}
+  .min-width-#{$space} {
+    min-width: #{$space}+ '%' !important;
+  }
+
+  // in percentage // usage .max-height-{percentage}
+  .max-height-#{$space} {
+    max-height: #{$space}+ '%' !important;
+  }
+  // in percentage // usage .max-width-{percentage}
+  .max-width-#{$space} {
+    max-width: #{$space}+ '%' !important;
+  }
+
+  // in pixels // usage .mrg-{size}
+  .mrg-#{$space} {
+    margin: #{$space}px !important;
+  }
+  // in pixels // usage .pdd-{size}
+  .pdd-#{$space} {
+    padding: #{$space}px !important;
+  }
+
+  // in pixels
+  @each $side in $sides {
+    // usage .mrg-{top|left|right|bottom}-{size}
+    .mrg-#{$side}-#{$space} {
+      margin-#{$side}: #{$space}px !important;
+    }
+
+    // usage .pdd-{top|left|right|bottom}-{size}
+    .pdd-#{$side}-#{$space} {
+      padding-#{$side}: #{$space}px !important;
+    }
+  }
+
+}
+
+.min-height-auto {
+  min-height: auto !important;
+}
+
+.max-height-none {
+  max-height: none !important;
+}
+
+.min-width-auto {
+  min-width: auto !important;
+}
+
+.max-width-none {
+  max-width: none !important;
+}
+
+.height-auto {
+  height: auto !important;
+}
+
+.width-auto {
+  width: auto !important;
+}
+
+// padding, margin, width, height helpers --< End
+
+// text align helpers --> Start
+$alignments: (center, left, right, justify, inherit);
+@each $alignment in $alignments {
+  .text-#{$alignment} {
+    text-align: #{$alignment} !important;
+  }
+}
+
+// text align helpers --< End
+
+// element float helpers --> Start
+$floats: (none, left, right, inherit);
+@each $float in $floats {
+  .pull-#{$float} {
+    float: #{$float} !important;
+  }
+}
+
+// element float helpers --< End
+
+// element position helpers --> Start
+$positions: (static, relative, absolute, sticky, fixed);
+@each $position in $positions {
+  .position-#{$position} {
+    position: #{$position} !important;
+  }
+}
+
+// element position helpers --< End
+
+// element display helpers ---> Start
+$display-options: (inline, block, contents, flex, grid, inline-block, inline-flex, inline-grid, inline-table, list-item, run-in, table, table-caption, table-column-group, table-header-group, table-footer-group, table-row-group, table-cell, table-column, table-row, none, initial, inherit);
+@each $display-option in $display-options {
+  .display-#{$display-option} {
+    display: #{$display-option} !important;
+  }
+}
+
+// element display helpers ---< End
+
+// element opacity helpers ---> Start
+$opacity-options: (0, 10, 20, 30, 40, 50, 60, 70, 80, 90);
+@each $opacity-option in $opacity-options {
+  .opacity-#{$opacity-option} {
+    opacity: #{$opacity-option / 100} !important;
+  }
+}
+
+// element opacity helpers ---< End
+
+// element overflow helpers ---> Start
+$overflow-options: (visible, hidden, scroll, auto, none);
+@each $overflow-option in $overflow-options {
+  .overflow-#{$overflow-option} {
+    overflow: #{$overflow-option} !important;
+  }
+}
+
+// element overflow helpers ---< End
+
+// element overflow helpers ---> Start
+$cursor-options: (alias, all, auto, cell, context-menu, col-resize, copy, crosshair, default, e-resize, ew-resize, grab, grabbing, help, move, n-resize, ne-resize, nesw-resize, ns-resize, nw-resize, nwse-resize, no-drop, none, not-allowed, pointer, progress, row-resize, s-resize, se-resize, sw-resize, text, url, w-resize, wait, zoom-in, zoom-out);
+@each $cursor-option in $cursor-options {
+  .cursor-#{$cursor-option} {
+    cursor: #{$cursor-option} !important;
+  }
+}
+
+// element overflow helpers ---< End

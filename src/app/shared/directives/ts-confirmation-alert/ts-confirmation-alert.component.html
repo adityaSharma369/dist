@@ -1,0 +1,10 @@
+<ng-template #template>
+  <div class="confirmation-heading">{{confirmationText}}</div>
+  <div class="ts-clearfix">&nbsp;</div>
+  <button mat-flat-button (click)="confirm()" color="{{yes.color}}"
+          class="mrg-bottom-10 width-100">{{yes.text}}
+  </button>
+  <button mat-flat-button (click)="cancel()" color="{{no.color}}"
+          class="mrg-bottom-10 width-100">{{no.text}}
+  </button>
+</ng-template>

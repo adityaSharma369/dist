@@ -1,0 +1,44 @@
+@import "responsive_mixins";
+// responsive mixins for global use
+@import "mixins"; // Color mixins for global use
+
+//$theme-name: 'deeppurple-amber';
+$theme-name: 'pink-bluegrey';
+// Available themes
+// Light Mode --> deeppurple-amber | indigo-pink
+// Dark Mode ---> purple-green | pink-bluegrey
+
+// definition. do not change here -->Start;
+$dark-mode: false;
+$primary-color: #FFF;
+$background-color: #fafafa;
+// definition. do not change here --< End;
+
+// conditional variables updating only in if blocks
+// theme settings --> Start
+@if ($theme-name == 'deeppurple-amber') {
+  $primary-color: #673ab7;
+}
+
+@if ($theme-name == 'indigo-pink') {
+  $primary-color: #3f51b5;
+}
+
+@if ($theme-name == 'purple-green') {
+  $dark-mode: true;
+  $primary-color: #7b1fa2;
+  $background-color: #303030;
+}
+
+@if ($theme-name == 'pink-bluegrey') {
+  $primary-color: #c2185b; // #673ab7; // #7b1fa2;
+  $background-color: #303030;
+  $dark-mode: true;
+}
+
+@if ($theme-name == 'teric-blue') {
+  $primary-color: #4caf50; // #48a1FF;
+  $dark-mode: false;
+}
+
+// theme settings --< End

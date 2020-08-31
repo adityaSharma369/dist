@@ -1,0 +1,79 @@
+<!--<div class="pdd-20">-->
+<!--  <div class="container"-->
+<!--       fxLayout-->
+<!--       fxLayout.xs="column"-->
+<!--       fxLayoutAlign="center"-->
+<!--       fxLayoutGap="0px"-->
+<!--       fxLayoutGap.xs="0">-->
+<!--    <div class="item item-1" fxFlex="20%">Item 1</div>-->
+<!--    <div class="item item-2" fxFlex="20%" fxFlexOrder="3">Item 2</div>-->
+<!--    <div class="item item-3" fxFlex>Item 3</div>-->
+<!--  </div>-->
+
+<!--  <div class="container"-->
+<!--       fxLayout-->
+<!--       fxLayout.xs="column"-->
+<!--       fxLayoutAlign="center"-->
+<!--       fxLayoutGap="0px"-->
+<!--       fxLayoutGap.xs="0">-->
+<!--    <div class="item item-4" fxFlex fxFlexOffset="20%" fxFlexOffset.xs="0">Item 4</div>-->
+<!--    <div class="item item-5" fxFlex="20%">Item 5</div>-->
+<!--    <div class="item item-6" fxFlex="20%">Item 6</div>-->
+<!--  </div>-->
+<!--</div>-->
+<mat-card class="no-color with-search page-main-card">
+  <mat-card-header>
+    <mat-card-title class="main-title">Dashboard
+    </mat-card-title>
+    <div fxFlex></div>
+    <div class="compact-form-control">
+      <div class="ts-mat-button-group">
+        <button mat-flat-button (click)="updateMode('today')" color="{{filterMode === 'today' ? 'primary' : undefined}}">Today</button>
+        <button mat-flat-button (click)="updateMode('yday')" color="{{filterMode === 'yday' ? 'primary' : undefined}}">Yesterday</button>
+        <button mat-flat-button disabled color="{{filterMode === 'custom' ? 'primary' : undefined}}">Custom</button>
+      </div>
+    </div>
+  </mat-card-header>
+  <div class="ts-clearfix"></div>
+  <mat-card-content>
+    <div fxFlex class="width-100">
+      <div class="container"
+           fxLayout
+           fxLayout.xs="column"
+           fxLayoutAlign="center"
+           fxLayoutGap="20px"
+           fxLayoutGap.xs="0">
+        <div fxFlex>
+          <div class="dashboard-item">
+            <mat-icon class="item-icon total" svgIcon="group"></mat-icon>
+            <div class="item-value">{{analytics.person_total || 0 | number}}</div>
+            <div class="item-text">Total</div>
+          </div>
+        </div>
+        <div fxFlex>
+          <div class="dashboard-item">
+            <mat-icon class="item-icon absent" svgIcon="group"></mat-icon>
+            <div class="item-value">{{analytics.person_absent || 0 | number}}</div>
+            <div class="item-text">Absent</div>
+          </div>
+        </div>
+        <div fxFlex>
+          <div class="dashboard-item">
+            <mat-icon class="item-icon present" svgIcon="group"></mat-icon>
+            <div class="item-value">{{analytics.person_present || 0 | number}}</div>
+            <div class="item-text">Present</div>
+          </div>
+        </div>
+        <div fxFlex>
+          <div class="dashboard-item">
+            <mat-icon class="item-icon irregular" svgIcon="group"></mat-icon>
+            <div class="item-value">{{analytics.person_irregular || 0 | number}}</div>
+            <div class="item-text">Irregular</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+

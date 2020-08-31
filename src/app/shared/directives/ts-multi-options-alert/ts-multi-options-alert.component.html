@@ -1,0 +1,8 @@
+<ng-template #template>
+  <div class="option-box-heading">{{headingText}}</div>
+  <div class="option-box-description">{{descriptionText}}</div>
+  <div class="ts-clearfix">&nbsp;</div>
+  <button mat-flat-button *ngFor="let option of optionsList" (click)="selected(option.key)" color="{{option.color}}"
+          class="option-item">{{option.text || option.key | titlecase}}
+  </button>
+</ng-template>

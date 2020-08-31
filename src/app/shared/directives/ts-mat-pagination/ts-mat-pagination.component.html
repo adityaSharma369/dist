@@ -1,0 +1,12 @@
+<!--*ngIf="getPages(pagination.totalItems, pagination.pageSize) > 1 || alwaysShow"-->
+<mat-paginator [length]="pagination.totalItems" *ngIf="pagination.totalItems > 0"
+               [pageIndex]="pagination.pageIndex"
+               [pageSize]="pagination.pageSize"
+               [pageSizeOptions]="pagination.pageSizeOptions"
+               (page)="pageEvent($event)"
+               [showFirstLastButtons]="showFirstLastButtons"
+               [hidePageSize]="hidePageSize"
+               [disabled]="disabled"
+               [color]="color"
+>
+</mat-paginator>

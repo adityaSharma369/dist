@@ -1,0 +1,60 @@
+<div class="ts-calendar-wrapper">
+  <div class="ts-calendar-controls mrg-bottom-10"
+       fxLayout
+       fxLayoutAlign="center"
+       fxLayoutGap="0px">
+    <div fxFlex="" class="current-month-year-title">
+        <span class="d-inline-block d-md-none">
+          {{calendar.monthsShort[calendar.currentMonth]}}
+        </span>
+      <span class="d-none d-md-inline-block">
+          {{calendar.months[calendar.currentMonth]}}
+        </span> - {{calendar.currentYear}}
+    </div>
+    <div fxFlex="" class="ts-mat-button-group text-right">
+      <button mat-flat-button color="primary" [disabled]="!calendar.canNavigatePrevMonth()"
+              (click)="calendar.getPrevMonth()">Prev
+      </button>
+      <button mat-flat-button color="primary" (click)="calendar.getToday()">Today</button>
+      <button mat-flat-button color="primary" [disabled]="!calendar.canNavigateNextMonth()"
+              (click)="calendar.getNextMonth()">Next
+      </button>
+    </div>
+
+  </div>
+  <div class="ts-calendar-weeks"
+       fxLayout
+       fxLayoutAlign="center"
+       fxLayoutGap="0px">
+    <div *ngFor="let dayName of calendar.weekDays;let i = index" fxFlex=""
+         class="ts-week-name-item ts-week-day-{{i}}">
+      <span class="d-block d-md-none">{{calendar.weekDaysMin[i]}}</span>
+      <span class="d-none d-md-block d-lg-none">{{calendar.weekDaysShort[i]}}</span>
+      <span class="d-none d-lg-block">{{calendar.weekDays[i]}}</span>
+    </div>
+  </div>
+  <div class="ts-calendar-dates"
+       fxLayout
+       fxLayoutAlign="center"
+       fxLayoutGap="0px" *ngFor="let week of calendar.weekRows">
+    <div *ngFor="let day of calendar.dates[week]; let i = index" fxFlex=""
+         class="ts-day-item-wrapper ts-week-day-{{i}} ts-week-{{week}}" [class.ts-date-not-available]="!day">
+      <div *ngIf="day" class="ts-day-item" [class.cursor-pointer]="calendar.canSelect"
+           [class.is_selected]="calendar.selectedDates.indexOf(day?.date) > -1"
+           (click)="calendar.canSelect && !day?.is_disabled && !day?.is_not_available && calendar.daySelect(day?.date)"
+           (contextmenu)="!day?.is_disabled && !day?.is_not_available && calendar.onContextMenu($event, day)"
+           [class.is_today]="day?.is_today" [class.is_disabled]="day?.is_disabled || day?.is_not_available">
+        <div class="ts-day-text">{{day.day}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="context-menu" #contextMenu>
+  {{calendar.selectedDates.join(', ')}}
+  <mat-list>
+    <mat-list-item>Set as Holiday</mat-list-item>
+    <mat-list-item>Set as Leave</mat-list-item>
+    <mat-list-item>Set as Absent</mat-list-item>
+  </mat-list>
+</div>

@@ -1,0 +1,18 @@
+<mat-form-field appearance="{{appearance}}">
+  <mat-label>{{options.config.searchPlaceholderText}}</mat-label>
+  <mat-select (valueChange)="onValueChange(formCtrl.value)" [attr.required]="required" [multiple]="true"
+              [formControl]="formCtrl"
+              [placeholder]="options.config.searchPlaceholderText">
+    <!-- place ngx-mat-select-search inside mat-option to allow opening without initial selection -->
+    <mat-option>
+      <ngx-mat-select-search (toggleAll)="toggleAll($event)" [showToggleAllCheckbox]="options.config.enableCheckAll"
+                             [noEntriesFoundLabel]="options.config.noDataAvailablePlaceholderText"
+                             [placeholderLabel]="options.config.searchPlaceholderText"
+                             [formControl]="serverSideFilteringCtrl"
+                             [searching]="searching"></ngx-mat-select-search>
+    </mat-option>
+    <mat-option (onSelectionChange)="onItemSelect($event)" *ngFor="let item of filteredData | async" [value]="item">
+      {{options.config.displayWith(item) | titlecase}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

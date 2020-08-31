@@ -1,0 +1,8 @@
+<div class="ts-file-drop_zone" [class.drag-enter-effect]="isDragOver" (drop)="handleFileSelect($event)"
+     (dragover)="handleDragOver($event)" (dragleave)="handleDragLeave($event)">Drop files here
+  <div class="ts-clearfix mrg-bottom-10"></div>
+  <div class="legend-line">OR</div>
+  <div class="ts-clearfix mrg-bottom-10"></div>
+  <input type="file" #uploadFileInput (change)="handleFileInputSelect($event)" multiple class="display-none">
+  <button mat-flat-button color="primary" (click)="uploadFileInput.click()">Choose files</button>
+</div>

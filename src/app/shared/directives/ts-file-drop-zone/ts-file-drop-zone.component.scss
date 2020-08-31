@@ -1,0 +1,20 @@
+@import "~src/assets/scss/common";
+
+.ts-file-drop_zone {
+  padding: 40px;
+  @if $dark-mode {
+    border: 2px dashed colorDarkness($background-color, 5);
+  } @else {
+    border: 2px dashed colorDarkness($background-color, 10);
+  }
+  border-radius: 10px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+
+  &.drag-enter-effect {
+    border-color: $primary-color;
+    background: $background-color;
+    color: $primary-color;
+  }
+}

@@ -1,0 +1,8 @@
+<span *ngIf="errors?.required">{{messages.required || 'required'}}</span>
+<span *ngIf="errors?.email">{{messages.email || 'invalid email address'}}</span>
+<span *ngIf="errors?.minlength">{{messages.minlength || "minimum length is " + errors?.minlength.requiredLength}}</span>
+<span *ngIf="errors?.maxlength">{{messages.maxlength || 'maximum length is ' + errors?.maxlength.requiredLength}}</span>
+<span *ngIf="errors?.min">{{messages.min || "minimum allowed number is " + errors?.min.min}}</span>
+<span *ngIf="errors?.max">{{messages.max || 'maximum allowed number is ' + errors?.max.max}}</span>
+<span *ngIf="errors?.pattern">{{messages.pattern || 'does not match required pattern '}}</span>
+<span *ngIf="errors?.custom">{{errors.custom?.error || 'invalid value'}}</span>

@@ -1,0 +1,159 @@
+@function getTextColorForBackground($color) {
+  @if (lightness($color) > 50) {
+    @return #000000; // Lighter backgorund, return dark color
+  } @else {
+    @return #ffffff; // Darker background, return light color
+  }
+}
+
+@function tint($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+
+@function shade($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
+
+@function colorLightness($color, $amount) {
+  @return lighten($color, $amount);
+}
+
+@function colorDarkness($color, $amount) {
+  @return darken($color, $amount);
+}
+
+@function getComplementColor($color) {
+  @return complement($color);
+}
+@function getInvertColor($color) {
+  @return invert($color);
+}
+
+
+// Animation mixin --> Start
+// Usage @include keyframe(changecolour) {0% {color: #000; 100% { color: #FFF; } }
+
+@mixin keyframe ($animation_name) {
+  @-webkit-keyframes #{$animation_name} {
+    @content;
+  }
+
+  @-moz-keyframes #{$animation_name} {
+    @content;
+  }
+
+  @-o-keyframes #{$animation_name} {
+    @content;
+  }
+
+  @keyframes #{$animation_name} {
+    @content;
+  }
+}
+// usage @include animation(10s, 5s, changecolour)
+@mixin animation ($delay, $duration, $animation, $direction: forward, $fillmode: fowards) {
+  -webkit-animation-delay: $delay;
+  -webkit-animation-duration: $duration;
+  -webkit-animation-name: $animation;
+  -webkit-animation-fill-mode: $fillmode;
+  -webkit-animation-direction: $direction;
+
+  -moz-animation-delay: $delay;
+  -moz-animation-duration: $duration;
+  -moz-animation-name: $animation;
+  -moz-animation-fill-mode: $fillmode;
+  -moz-animation-direction: $direction;
+
+  animation-delay: $delay;
+  animation-duration: $duration;
+  animation-name: $animation;
+  animation-fill-mode: $fillmode;
+  animation-direction: $direction;
+}
+
+// Slide Out Top from Center
+@include keyframe(animation-slide-out-up) {
+  0% {
+    transform: translate(0,0);
+  }
+
+  100% {
+    transform: translate(0,-100%);
+  }
+}
+
+@include keyframe(animation-slide-out-down) {
+  0% {
+    transform: translate(0,0);
+  }
+
+  100% {
+    transform: translate(0,100%);
+  }
+}
+
+// Slide Out Left from Center
+@include keyframe(animation-slide-out-left) {
+  0% {
+    transform: translate(0,0);
+  }
+
+  100% {
+    transform: translate(-100%,0);
+  }
+}
+
+// Slide out Right from Center
+@include keyframe(animation-slide-out-right) {
+  0% {
+    transform: translate(0,0);
+  }
+
+  100% {
+    transform: translate(100%,0);
+  }
+}
+
+@include keyframe(animation-slide-in-up) {
+  0% {
+    transform: translate(0,100%);
+  }
+
+  100% {
+    transform: translate(0,0);
+  }
+}
+
+@include keyframe(animation-slide-in-down) {
+  0% {
+    transform: translate(0,-100%);
+  }
+
+  100% {
+    transform: translate(0,0);
+  }
+}
+
+// Slide in Left to Center
+@include keyframe(animation-slide-in-left) {
+  0% {
+    transform: translate(-100%,0);
+  }
+
+  100% {
+    transform: translate(0,0);
+  }
+}
+
+// Slide in Right to Center
+@include keyframe(animation-slide-in-right) {
+  0% {
+    transform: translate(100%,0);
+  }
+
+  100% {
+    transform: translate(0,0);
+  }
+}
+
+// Animation mixin --< End

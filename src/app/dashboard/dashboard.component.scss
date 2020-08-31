@@ -1,0 +1,78 @@
+@import "~src/assets/scss/common";
+
+.item {
+  background-color: $primary-color;
+  padding: 10px;
+  color: getTextColorForBackground ($primary-color);
+  margin: 5px 0px;
+}
+
+.item-4 {
+  margin-left: 10px;
+  color: getTextColorForBackground(colorLightness($primary-color, 20));
+  background-color: colorLightness($primary-color, 20) !important;
+}
+
+.item-2 {
+  color: getTextColorForBackground(colorDarkness($primary-color, 20));
+  background-color: colorDarkness($primary-color, 20) !important;
+}
+
+.item-5 {
+  color: getTextColorForBackground(colorDarkness($primary-color, 30));
+  background-color: colorDarkness($primary-color, 30) !important;
+}
+
+.item-6 {
+  color: getTextColorForBackground(colorDarkness($primary-color, 40));
+  background-color: colorDarkness($primary-color, 40) !important;
+}
+
+.item-3 {
+  color: getTextColorForBackground(colorLightness($primary-color, 40));
+  background-color: colorLightness($primary-color, 40) !important;
+}
+
+
+.dashboard-item {
+  background-color: $primary-color;
+  padding: 10px;
+  text-align: center;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+  margin-bottom: 10px;
+  @include md {
+     margin-bottom: 0px;
+  }
+  .item-icon {
+    height: 45px;
+    margin-bottom: 10px;
+    transform: scale(1.5);
+    color: getTextColorForBackground($primary-color);
+    //&.total {
+    //  color: blue;
+    //}
+    //&.present {
+    //  color: green;
+    //}
+    //&.absent {
+    //  color: yellow;
+    //}
+    //&.irregular {
+    //  color: red;
+    //}
+  }
+
+  .item-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: getTextColorForBackground($primary-color);
+    margin-bottom: 5px;
+  }
+
+  .item-text {
+    font-size: .9rem;
+    color: getTextColorForBackground($primary-color);
+  }
+
+}

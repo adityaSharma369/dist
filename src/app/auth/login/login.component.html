@@ -1,0 +1,31 @@
+<div class="main-auth-wrapper">
+  <div class="auth-header">Login</div>
+  <div class="ts-clearfix">&nbsp;</div>
+  <form name="loginForm" [formGroup]="loginForm" class="form-spacing">
+    <mat-form-field appearance="outline" class="input-block">
+      <mat-label>Username</mat-label>
+      <input name="username" matInput type="text" placeholder="enter username" formControlName="username"/>
+      <mat-error>
+        <ts-display-form-errors [errors]="loginForm?.controls.username?.errors"
+                                [messages]="{required: 'Username is required'}">
+        </ts-display-form-errors>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="input-block">
+      <mat-label>Password</mat-label>
+      <input name="password" matInput type="password" placeholder="enter password" formControlName="password"
+             maxlength="16"/>
+      <mat-error>
+        <ts-display-form-errors [errors]="loginForm?.controls.password?.errors"
+                                [messages]="{required: 'Password is required'}">
+        </ts-display-form-errors>
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button type="submit" [disabled]="loginForm.invalid || disableActionButtons" (click)="login()"
+            color="primary" [class.has-loading-spinner]="disableActionButtons">
+      <mat-spinner diameter="20" class="input-loading-spinner" *ngIf="disableActionButtons"></mat-spinner>
+      Login
+    </button>
+  </form>
+</div>

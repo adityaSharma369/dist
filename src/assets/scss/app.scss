@@ -1,0 +1,808 @@
+/* You can add global styles to this file, and also import other style files */
+@import "common";
+// global include variables
+@import "responsive_display";
+// responsive display classes
+@import "helpers"; // width, height, margin, padding helper classes
+
+@if ($theme-name == 'deeppurple-amber') {
+  @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+}
+
+@if ($theme-name == 'indigo-pink') {
+  @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+}
+
+@if ($theme-name == 'purple-green') {
+  @import "~@angular/material/prebuilt-themes/purple-green.css";
+}
+
+@if ($theme-name == 'pink-bluegrey') {
+  @import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+}
+
+/// @if $theme-name == 'teric-blue' uncomment bellow line
+//@import "./custom-theme";
+
+html, body {
+  height: 100%;
+  font-size: 13px;
+  @include sm {
+    font-size: 14px;
+  }
+  @include md {
+    font-size: 15px
+  }
+  @include lg {
+    font-size: 16px
+  }
+}
+
+body {
+  background-color: $background-color;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+.hide-in-mobile {
+  display: none;
+  @include md {
+    display: inline-flex
+  }
+}
+
+.show-in-mobile {
+  display: inline-flex;
+  @include md {
+    display: none;
+  }
+}
+
+.ts-clearfix {
+  clear: both !important;
+
+  &::after {
+    display: block;
+    clear: both;
+    content: ""
+  }
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.main-header .logo {
+  width: 120px;
+  height: 40px;
+  margin: 0px 10px;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url(/assets/images/logo.svg) !important;
+  @include md {
+    //width: 160px;
+  }
+}
+
+.page-content {
+  height: calc(100vh - 56px) !important;
+  @include md {
+    height: calc(100vh - 64px) !important;
+  }
+}
+
+.page-sidenav {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  //width: 100%;
+  //max-width: 260px;
+  min-width: 230px;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  border-right: none;
+  top: 0;
+  bottom: 0;
+
+  .mat-list-item-content {
+    padding: 0px !important;
+  }
+
+  a {
+    text-align: left;
+    border-radius: unset !important;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 48px;
+    padding: 0 16px;
+    width: 100%;
+
+    .mat-icon {
+      margin-right: 10px;
+    }
+
+    @if $dark-mode {
+      .mat-icon {
+        color: #AAA;
+        background: #DDD;
+        border-radius: 50%;
+        padding: 4px;
+      }
+    } @else {
+
+    }
+
+    &.active {
+      @if $dark-mode {
+        color: #FFFFFF;
+        background-color: $background-color;
+        .mat-icon {
+          color: $primary-color;
+          background: #FFFFFF;
+          border-radius: 50%;
+        }
+      } @else {
+        background-color: $background-color;
+        color: $primary-color;
+      }
+    }
+  }
+}
+
+
+.auth-layout-wrapper {
+  &.container {
+    height: 100vh;
+  }
+
+  .main-auth-holder {
+    margin: 10px;
+    background: colorLightness($background-color, 5);
+    @include sm {
+      margin-top: 100px;
+    }
+    padding: 20px;
+  }
+
+  .logo {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid colorDarkness($background-color, 5);
+
+    img {
+      max-height: 100%;
+    }
+  }
+}
+
+.img-responsive {
+  width: auto;
+  height: auto;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.animation-slide-in-up {
+  @include animation(0, 0.5s, animation-slide-in-up, ease);
+}
+
+.animation-slide-in-down {
+  @include animation(0, 0.5s, animation-slide-in-down, ease);
+}
+
+.animation-slide-in-right {
+  @include animation(0, 0.5s, animation-slide-in-right, ease);
+}
+
+.animation-slide-in-left {
+  @include animation(0, 0.5s, animation-slide-in-left, ease);
+}
+
+.animation-slide-out-up {
+  @include animation(0, 0.5s, animation-slide-out-up, ease);
+}
+
+.animation-slide-out-down {
+  @include animation(0, 0.5s, animation-slide-out-down, ease);
+}
+
+.animation-slide-out-right {
+  @include animation(0, 0.5s, animation-slide-out-right, ease);
+}
+
+.animation-slide-out-left {
+  @include animation(0, 0.5s, animation-slide-out-left, ease);
+}
+
+.form-spacing {
+  .input-block {
+    margin-top: 10px;
+  }
+}
+
+.input-block {
+  display: block !important;
+}
+
+.auth-header {
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.no-color {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.compact-form-control {
+  .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+    margin: 0px !important;
+  }
+
+  .mat-form-field-appearance-standard .mat-form-field-flex {
+    padding-top: 0 !important;
+  }
+}
+
+.page-main-card {
+  .main-search-bar {
+    width: 120px;
+    @include sm {
+      width: 180px;
+    }
+    @include md {
+      width: 200px;
+    }
+    @include lg {
+      width: 228px;
+    }
+  }
+
+  .mat-card-header-text {
+    margin: 0px;
+  }
+
+  .main-title {
+    font-size: 24px;
+  }
+
+  .mat-card-header {
+    margin-bottom: 0px;
+  }
+
+  &.with-search {
+    .mat-card-header {
+      margin-bottom: 0;
+    }
+
+    .main-title {
+      line-height: 60px;
+      margin-bottom: 0;
+    }
+  }
+
+  height: calc(100% - 32px);
+  overflow: auto;
+  @include sm {
+    //height: calc(100vh - 98px);
+  }
+
+  .mat-card-content {
+
+    //height: calc(100% - 70px);
+    height: calc(100% - 135px);
+    //&:has(ts-mat-pagination) {
+    //}
+
+    .table-responsive {
+      max-height: 100%;
+
+      &.table-responsive-fix {
+        max-height: calc(100% + 6px); // to fix double scrolling bug when not needed
+      }
+    }
+
+    &.as-data-list-card {
+      padding: 15px;
+      background: colorLightness($background-color, 7);
+    }
+  }
+}
+
+.no-data-card {
+  text-align: center;
+  margin-top: 60px;
+
+  .no-data-card-text {
+    font-size: 24px;
+    color: colorLightness(getTextColorForBackground($background-color), 20);
+  }
+
+  .mat-icon {
+    font-size: 80px;
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.table-responsive {
+  width: 100%;
+  overflow: auto;
+
+  tr.mat-footer-row, tr.mat-row {
+    &:hover {
+      td {
+        background-color: colorDarkness($background-color, 1);
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.no-table-cell-wrap {
+  .mat-cell {
+    white-space: nowrap !important;
+    padding-right: 10px;
+  }
+
+  .min-width-cell {
+    padding-right: 0px !important;
+    width: 20px !important;
+  }
+
+  .mat-column-actions.mat-table-sticky {
+    @if ($dark-mode) {
+      border-left: 1px solid colorLightness($background-color, 30);
+    } @else {
+      border-left: 1px solid colorDarkness($background-color, 10);
+    }
+  }
+}
+
+ts-mat-pagination {
+  .mat-paginator-range-actions {
+    .mat-icon-button {
+      @include xs {
+        width: 25px !important;
+      }
+    }
+  }
+
+  .mat-paginator-page-size-label {
+    display: none;
+    @include sm {
+      display: block;
+    }
+  }
+
+  .mat-paginator-page-size {
+    margin: 0 !important;
+    @include sm {
+      margin-right: 10px !important;
+    }
+  }
+
+  .mat-paginator-range-label {
+    @include xs {
+      margin: 0 6px 0 6px !important;
+    }
+  }
+}
+
+.container {
+  //padding: 10px;
+}
+
+.rounded {
+  border-radius: 50% !important;
+}
+
+.add-action-button {
+  position: fixed;
+  margin-right: 15px;
+  margin-bottom: 45px;
+  @include md {
+    margin-right: 30px;
+    margin-bottom: 40px;
+  }
+  z-index: 110;
+
+  button {
+    height: 60px;
+    width: 60px;
+    min-width: 60px;
+    min-height: 60px;
+    padding: 0 !important;
+
+    .mat-icon {
+      //width: 36px !important;
+      //height: 36px !important;
+      transform: scale(2);
+    }
+  }
+}
+
+
+.bottom-right {
+  bottom: 0 !important;
+  right: 0 !important;
+}
+
+.bottom-left {
+  bottom: 0 !important;
+  left: 0 !important;
+}
+
+.top-right {
+  top: 0 !important;
+  right: 0 !important;
+}
+
+.top-left {
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.mat-table {
+  th.mat-header-cell {
+    text-align: left;
+    font-weight: bold;
+    color: getTextColorForBackground($background-color);
+    text-transform: capitalize;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+}
+
+.has-loading-spinner {
+  padding-left: 30px !important;
+
+  .input-loading-spinner {
+    float: left;
+    position: absolute;
+    top: 7px;
+    left: 6px;
+  }
+}
+
+#toasta .toast.toasta-theme-material .toast-text .toast-title {
+  line-height: 20px !important;
+}
+
+.image_upload_status {
+  position: absolute;
+  bottom: 0px;
+  background: rgba(0, 0, 0, 0.6);
+  width: 100%;
+
+  .image_upload_progress {
+    border-bottom: 3px solid #AAAAAA;
+  }
+
+  .bdr_btm_red_cls {
+    border-bottom-color: #FF0000;
+  }
+
+  .bdr_btm_blue_cls {
+    border-bottom-color: #00AAF1;
+  }
+
+  .bdr_btm_green_cls {
+    border-bottom-color: #008000;
+  }
+
+  .image_upload_text {
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 0px 2px;
+  }
+}
+
+
+// time picker overriden styles start    ------   NGX-TIME-PICKER
+
+.timepicker-backdrop-overlay {
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+.timepicker-overlay {
+  z-index: 9999 !important;
+}
+
+.timepicker {
+
+  .timepicker__header {
+    background-color: $primary-color !important;
+  }
+
+  .clock-face__number {
+    color: $primary-color !important;
+  }
+
+  .clock-face__number > span.active {
+    background-color: $primary-color !important;
+  }
+
+  .clock-face__clock-hand {
+    background-color: $primary-color !important;
+  }
+
+  .timepicker-button {
+    color: $primary-color !important;
+  }
+
+  .clock-face__clock-hand_minute:before {
+    border-color: $primary-color !important;
+  }
+
+  .timepicker__body {
+
+    @if ($dark-mode) {
+      background-color: $background-color !important;
+    }
+  }
+
+  .timepicker__actions {
+
+    @if ($dark-mode) {
+      background-color: $background-color !important;
+    }
+  }
+
+  .clock-face {
+
+    @if ($dark-mode) {
+      background-color: #424242 !important;
+    }
+  }
+
+}
+
+// time picker overriden styles end
+
+// datetime picker -->
+
+.mat-datetimepicker-content {
+  .mat-datetimepicker-calendar-header {
+    background-color: $primary-color
+  }
+
+  .mat-datetimepicker-calendar-body-cell-content {
+    &.mat-datetimepicker-calendar-body-selected {
+      background-color: $primary-color;
+      color: white;
+    }
+
+    &.mat-datetimepicker-calendar-body-disabled > .mat-datetimepicker-calendar-body-selected {
+      background-color: rgba($primary-color, 0.4);
+    }
+
+    &.mat-datetimepicker-calendar-body-today {
+      &:not(.mat-datetimepicker-calendar-body-selected) {
+        border-color: $primary-color;
+      }
+
+      &.mat-datetimepicker-calendar-body-selected {
+        box-shadow: inset 0 0 0 1px getTextColorForBackground($primary-color);
+      }
+    }
+  }
+
+  .mat-datetimepicker-clock-center {
+    background-color: $primary-color;
+  }
+
+  .mat-datetimepicker-clock-hand {
+    background-color: $primary-color;
+
+    &::before {
+      background-color: $primary-color;
+    }
+  }
+
+  .mat-datetimepicker-clock-cell {
+    &.mat-datetimepicker-clock-cell-selected {
+      background-color: colorLightness($primary-color, 5);
+    }
+  }
+}
+
+
+.min-height-300 {
+  @include md {
+    min-height: auto !important;
+  }
+  @include lg {
+    min-height: 300px !important;
+  }
+}
+
+.legend-line {
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  display: table;
+  white-space: nowrap;
+
+  &:before, &:after {
+    border-top: 1px solid $primary-color;
+    content: '';
+    display: table-cell;
+    position: relative;
+    top: 0.5em;
+    width: 45%;
+  }
+
+  &:before {
+    right: 1.5%;
+  }
+
+  &:after {
+    left: 1.5%;
+  }
+}
+
+.ts-mat-button-group {
+  .mat-button-base {
+    border-radius: 0px;
+    border-left: 1px solid colorLightness($background-color, 7);
+
+    &.mat-primary {
+      border-left: 1px solid colorDarkness($primary-color, 10);
+    }
+
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+      border-left: none;
+    }
+
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+  }
+}
+
+
+.ts-calendar-wrapper {
+  $calendar-line-color: colorDarkness($background-color, 10);
+  @if $dark-mode {
+    $calendar-line-color: colorLightness($background-color, 20);
+  }
+
+  $calendar-header-color: colorDarkness($background-color, 10);
+
+  .current-month-year-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    line-height: 40px;
+  }
+
+  .ts-calendar-weeks {
+    //border-bottom: 1px solid $calendar-line-color;
+  }
+
+  .ts-week-name-item {
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: $primary-color;
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+    background-color: $calendar-header-color;
+    border-right: 1px solid $calendar-line-color;
+    border-bottom: 1px solid $calendar-line-color;
+    border-top: 1px solid $calendar-line-color;
+
+    &:first-child {
+      border-left: 1px solid $calendar-line-color;
+    }
+
+    &.ts-week-day-0 {
+      //background-color: colorLightness($calendar-header-color, 10);
+    }
+  }
+
+  .ts-calendar-dates {
+  }
+
+  .ts-day-item-wrapper {
+    border-right: 1px solid $calendar-line-color;
+    border-bottom: 1px solid $calendar-line-color;
+
+    &:first-child {
+      //border-top: 1px solid #AAAAAA;
+      border-left: 1px solid $calendar-line-color;
+    }
+
+    .ts-day-item {
+      color: getTextColorForBackground($calendar-header-color);
+      min-height: 30px;
+      padding: 5px;
+      font-weight: bold;
+      background-color: $background-color;
+
+      &.is_selected {
+        background-color: $primary-color !important;
+        color: getTextColorForBackground($primary-color);
+      }
+
+      &.is_disabled {
+        background-color: colorDarkness($background-color, 5) !important;
+        color: colorDarkness($background-color, 15)
+      }
+
+
+      .ts-day-text {
+        float: right;
+        text-align: right;
+        font-size: 1rem;
+        padding: 3px;
+        @include sm {
+          padding: 6px;
+        }
+
+      }
+
+      &.is_today {
+        .ts-day-text {
+          border-radius: 50%;
+          background-color: $primary-color;
+          color: getTextColorForBackground($primary-color);
+        }
+      }
+    }
+
+    &:hover {
+      .ts-day-item {
+        background-color: colorLightness($background-color, 5);
+        @if $dark-mode {
+          background-color: colorLightness($calendar-header-color, 5);
+        }
+      }
+    }
+
+    &.ts-date-not-available {
+      background-color: $background-color;
+    }
+
+    &.ts-week-day-0 {
+      .ts-day-item {
+        //background-color: colorLightness($calendar-header-color, 10);
+      }
+    }
+  }
+
+  .ts-calendar-context-menu {
+    display: none;
+    background: $background-color;
+    border: 1px solid colorDarkness($background-color, 10);
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+
+.mat-button, .mat-fab, .mat-flat-button, .mat-icon-button, .mat-mini-fab, .mat-raised-button, .mat-stroked-button {
+  font-size: 1rem !important;
+}
+
+.flexible-buttons {
+  .mat-button, .mat-flat-button, .mat-icon-button, .mat-stroked-button {
+    min-width: auto !important;
+    padding: 0px 4px !important;
+  }
+}
+
+.ts-sm-buttons {
+  .mat-button, .mat-flat-button, .mat-icon-button, .mat-stroked-button {
+    min-width: auto !important;
+    padding: 0px 4px !important;
+    line-height: 20px !important;
+  }
+}
