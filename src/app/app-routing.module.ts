@@ -6,6 +6,7 @@ import {NonAuthGuard} from './shared/guards/non-auth.guard';
 import {AppLayoutComponent} from './layouts/app-layout/app-layout.component';
 import {AuthGuard} from './shared/guards/auth.guard';
 import {DashboardComponent} from './dashboard/dashboard.component';
+import {MapComponentComponent} from './map-component/map-component.component';
 
 
 const routes: Routes = [
@@ -21,6 +22,7 @@ const routes: Routes = [
       {path: '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)},
     ]
   },
+  {path: 'map', component: MapComponentComponent},
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
   {path: 'not-found', component: NotFoundComponent},
   {path: '**', redirectTo: '/not-found'}

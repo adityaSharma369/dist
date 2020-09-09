@@ -1,0 +1,40 @@
+.main-wrapper {
+  .character-wrapper, .interactive-wrapper, .restricted-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2800px;
+    height: 2800px;
+    overflow: hidden;
+    img{
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .tree {
+    width: 100px;
+    position: absolute;
+    top: 100px;
+    left: 500px;
+    z-index: 0;
+  }
+
+  .chair {
+    width: 100px;
+    position: absolute;
+    top: 150px;
+    left: 100px;
+    z-index: 0;
+  }
+
+  .my-character {
+    width: 30px;
+    position: absolute;
+    top: 0px;
+    left: 100px;
+    z-index: 1;
+  }
+
+  //overflow: hidden;
+}
