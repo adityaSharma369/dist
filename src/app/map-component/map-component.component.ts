@@ -71,6 +71,9 @@ export class MapComponentComponent implements OnInit{
           rect[2] -= 20;
           if(!this.checkOverlap(rect)){
             $('.my-character').dequeue().animate({left: '-=20px'}, character_animation_time);
+            // $('.main-wrapper').dequeue().animate({scrollLeft: 1000}, character_animation_time);
+
+            // $('.main_wrapper').deque()
           }
           break;
         case 38: // up
@@ -79,6 +82,7 @@ export class MapComponentComponent implements OnInit{
           rect[3] -= 20
           if(!this.checkOverlap(rect)){
             $('.my-character').dequeue().animate({top: '-=20px'}, character_animation_time);
+            // $('.main-wrapper').dequeue().animate({scrollTop: '100px'}, character_animation_time);
           }
           break;
         case 39: // right
@@ -86,6 +90,7 @@ export class MapComponentComponent implements OnInit{
           rect[2] += 20;
           if(!this.checkOverlap(rect)){
             $('.my-character').dequeue().animate({left: '+=20px'}, character_animation_time);
+            // $('.main-wrapper').dequeue().animate({scrollLeft: '100px'}, character_animation_time);
           }
           break;
         case 40: // down
@@ -93,6 +98,7 @@ export class MapComponentComponent implements OnInit{
           rect[3] += 20
           if(!this.checkOverlap(rect)){
             $('.my-character').dequeue().animate({top: '+=20px'}, character_animation_time);
+            // $('.main-wrapper').dequeue().animate({scrollTop: '100px'}, character_animation_time);
           }
           break;
         default:
