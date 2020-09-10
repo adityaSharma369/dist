@@ -22,7 +22,7 @@ import {AppThemeModule} from './layouts/app-layout/app-theme/app-theme.module';
 import {AppLayoutComponent} from './layouts/app-layout/app-layout.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {AuthLayoutComponent} from './layouts/auth-layout/auth-layout.component';
-import { MapLayoutComponent } from './layouts/map-layout/map-layout.component';
+// import { MapLayoutComponent } from './layouts/map-layout/map-layout.component';
 import { MapComponentComponent } from './map-component/map-component.component';
 
 @NgModule({
@@ -31,7 +31,7 @@ import { MapComponentComponent } from './map-component/map-component.component';
     AppLayoutComponent,
     AuthLayoutComponent,
     DashboardComponent,
-    MapLayoutComponent,
+    // MapLayoutComponent,
     MapComponentComponent,
   ],
   imports: [
