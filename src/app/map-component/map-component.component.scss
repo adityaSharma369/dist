@@ -6,120 +6,134 @@
     width: 2800px;
     height: 2800px;
     overflow: hidden;
-    // transform: translate(-50%, -50%);
     img{
       width: 100%;
       height: 100%;
     }
   }
-
-  .tree {
-    width: 200px;
-    // height:124px;
-    position: absolute;
-    top: 800px;
-    // left: 500px;
-    z-index: 0;
-  }
-  .tree_1{
-    width: 300px;
-    // height:124px;
-    position: absolute;
-    top: 1200px;
-    // left: 500px;
-    z-index: 0;
-  }
-  .tree_2{
-    width: 300px;
-    // height:124px;
-    position: absolute;
-    top: 200px;
-    left: 2600px;
-    z-index: 0;
-  }
-  .tree_3{
-    width: 200px;
-    // height:124px;
-    position: absolute;
-    top: 1000px;
-    left: 600px;
-    z-index: 0;
-  }
-  .coconut-tree {
-    width: 100px;
-    height:124px;
-    position: absolute;
-    top: 200px;
-    left: 800px;
-    z-index: 0;
-  }
-
-  .chair {
-    width: 100px;
-    position: absolute;
-    top: 150px;
-    left: 100px;
-    z-index: 0;
-  }
-
   .my-character {
+    // width: 40px;
     width: 60px;
     position: absolute;
+    // top: 300px;
+    // left: 300px;
     top: 600px;
     left: 600px;
     z-index: 1;
   }
 
+  .tree {
+    width: 50%;
+    height:50%;
+    // img{
+    //   width: 50%;
+    //   height:50%;
+    // }
+  }
+  .coconut_1{
+    position: absolute;
+    width:652px;
+  
+  }
   .stage{
-    width: 1000px;
     position: absolute;
-    top: 600px;
-    left: 900px;
+    left:880px;
+    top:608px;
+    width:1080.5px;
+    height: 1080.5px;
+  }
+  .umbrella{
+    position: absolute;
+    left:55.49px;
+    top:685.37px;
+  }
+  .beach_chair{
+    position: absolute;
+    left:54.84px;
+    top:740.89px;
+  }
+  .coconut_2x{
+    position: absolute;
+    top:836px;
+  }
+  .table{
+    position: absolute;
+    left:109.13px;
+    top:1002.01px;
+    z-index: 1;
+  }
+  .top_chair{
+    position: absolute;
+    left:128.47px;
+    top:992.8px;
     z-index: 0;
   }
-  .ferris_wheel{
+  .bottom_chair{
     position: absolute;
-    top:100px;
-    left:100px;
-    z-index:0;
-    width:500px;
+    left:127.90px;
+    top:1046.46px;
   }
-  .house{
+  .right_chair{
     position: absolute;
-    top:1105px;
-    left:2200px;
+    left:173.39px;
+    top:1022.07px;
+  }
+  .left_chair{
+    position: absolute;
+    left:82.81px;
+    top:1021.14px;
+  }
+  .tube{
+    position: absolute;
+    left:2.51px;
+    top:1056.33px;
+  }
+  .table1{
+    position: absolute;
+    left:254.97px;
+    top:1145.93px;
+    z-index: 1;
+  }
+  .top_chair1{
+    position: absolute;
+    left:274.31px;
+    top:1136.79px;
     z-index: 0;
-    width: 600px;
   }
-  .banner{
+  .bottom_chair1{
     position: absolute;
-    top:100px;
-    left:700px;
-    z-index: 0;
-    width: 500px;
+    left:273.74px;
+    top:1190.08px;
   }
-  .banner1{
+  .right_chair1{
     position: absolute;
-    top:100px;
-    left:1500px;
-    z-index: 0;
-    width: 500px;
+    left:319.23px;
+    top:1166.60px;
   }
-  .single_chair{
+  .left_chair1{
     position: absolute;
-    top:1800px;
-    left:200px;
-    z-index: 0;
-    width: 300px;
+    left:228.65px;
+    top:1165.06px;
   }
-  .single_chair_1{
+  .top_mat{
     position: absolute;
-    top:1800px;
-    left:500px;
-    z-index: 0;
-    width: 300px;
+    left:178.27px;
+    top:1348.48px;
   }
-
-
-  //overflow: hidden;
+  .left_mat{
+    position: absolute;
+    left:112.90px;
+    top:1400.27px;
+  }
+  .bottom_mat{
+    position: absolute;
+    left:175.66px;
+    top:1466.39px;
+  }
+  .right_mat{
+    position: absolute;
+    left:268.66px;
+    top:1398.37px;
+  }
+  // overflow: hidden;
 }
