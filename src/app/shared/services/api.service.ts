@@ -18,18 +18,20 @@ export class ApiService {
 
   constructor(private _auth: AuthService, private _alert: AlertService, private _http: HttpClient, private _router: Router) {
     this.apiUrl = environment.api_url;
-    // const domainHost = window.location.hostname;
-    // switch (domainHost) {
-    //   case 'dev.teric.ai':
-    //     this.apiUrl = environment.dev_api_url;
-    //     break;
-    //   case 'teric.ai':
-    //     this.apiUrl = environment.api_url;
-    //     break;
-    //   case 'www.teric.ai':
-    //     this.apiUrl = environment.api_url;
-    //     break;
-    // }
+    const domainHost = window.location.hostname;
+    switch (domainHost) {
+      case 'dev.teric.ai':
+        this.apiUrl = environment.dev_api_url;
+        break;
+      case 'teric.ai':
+        this.apiUrl = environment.api_url;
+        break;
+      case 'www.teric.ai':
+        this.apiUrl = environment.api_url;
+        break;
+      case 'localhost':
+        this.apiUrl = environment.localhost_url;
+    }
   }
 
   private getOptions(overrideHeaders = {}, overrideOptions = {}) {

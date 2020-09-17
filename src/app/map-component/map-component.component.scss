@@ -42,98 +42,47 @@
     width:1080.5px;
     height: 1080.5px;
   }
-  .umbrella{
-    position: absolute;
-    left:55.49px;
-    top:685.37px;
+  .local_video{
+    position: fixed;
+    left:1000px;
+    top:600px;
   }
-  .beach_chair{
-    position: absolute;
-    left:54.84px;
-    top:740.89px;
+  .remote_video{
+    position: fixed;
+    left:100px;
+    top:0px;
+    z-index:10;
   }
-  .coconut_2x{
-    position: absolute;
-    top:836px;
+  .remote_video1{
+    position: fixed;
+    left:300px;
+    top:0px;
+    z-index:10;
   }
-  .table{
-    position: absolute;
-    left:109.13px;
-    top:1002.01px;
-    z-index: 1;
+  .remote_video2{
+    position: fixed;
+    left:500px;
+    top:0px;
+    z-index:10;
   }
-  .top_chair{
-    position: absolute;
-    left:128.47px;
-    top:992.8px;
-    z-index: 0;
+  .remote_video3{
+    position: fixed;
+    left:700px;
+    top:0px;
+    z-index:10;
   }
-  .bottom_chair{
-    position: absolute;
-    left:127.90px;
-    top:1046.46px;
+  .remote_video4{
+    position: fixed;
+    left:900;
+    top:0px;
+    z-index:10;
   }
-  .right_chair{
-    position: absolute;
-    left:173.39px;
-    top:1022.07px;
+  .remote_video5{
+    position: fixed;
+    left:1100px;
+    top:0px;
+    z-index:10;
   }
-  .left_chair{
-    position: absolute;
-    left:82.81px;
-    top:1021.14px;
-  }
-  .tube{
-    position: absolute;
-    left:2.51px;
-    top:1056.33px;
-  }
-  .table1{
-    position: absolute;
-    left:254.97px;
-    top:1145.93px;
-    z-index: 1;
-  }
-  .top_chair1{
-    position: absolute;
-    left:274.31px;
-    top:1136.79px;
-    z-index: 0;
-  }
-  .bottom_chair1{
-    position: absolute;
-    left:273.74px;
-    top:1190.08px;
-  }
-  .right_chair1{
-    position: absolute;
-    left:319.23px;
-    top:1166.60px;
-  }
-  .left_chair1{
-    position: absolute;
-    left:228.65px;
-    top:1165.06px;
-  }
-  .top_mat{
-    position: absolute;
-    left:178.27px;
-    top:1348.48px;
-  }
-  .left_mat{
-    position: absolute;
-    left:112.90px;
-    top:1400.27px;
-  }
-  .bottom_mat{
-    position: absolute;
-    left:175.66px;
-    top:1466.39px;
-  }
-  .right_mat{
-    position: absolute;
-    left:268.66px;
-    top:1398.37px;
-  }
+
   // overflow: hidden;
 }

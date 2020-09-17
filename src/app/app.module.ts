@@ -24,6 +24,7 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {AuthLayoutComponent} from './layouts/auth-layout/auth-layout.component';
 // import { MapLayoutComponent } from './layouts/map-layout/map-layout.component';
 import { MapComponentComponent } from './map-component/map-component.component';
+import { TwilioService } from './shared/services/twilio.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import { MapComponentComponent } from './map-component/map-component.component';
   providers: [
     // App Services
     AuthService, DataService, CommonService, ServerService, ApiService,
-    AlertService, MenuItemsService,
+    AlertService, MenuItemsService,TwilioService,
     // SocketService, WebSocketsService,
 
     // Route Guards

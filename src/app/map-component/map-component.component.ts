@@ -1,8 +1,9 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import * as $ from 'jquery';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { retry } from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http'
+import {CommonService} from '../shared/services/common.service';
 import { parse } from 'querystring';
 // import * as data from './../../location.json';
 @Component({
@@ -10,12 +11,24 @@ import { parse } from 'querystring';
   templateUrl: './map-component.component.html',
   styleUrls: ['./map-component.component.scss']
 })
-export class MapComponentComponent implements OnInit{
+export class MapComponentComponent implements OnInit,AfterViewInit {
   polygon:any[] = [];
   asset_coord:any[] = [];
+  access_token:any;
+  
+
+  @ViewChild("localVideo",{ static: true }) localVideo:ElementRef;
+  @ViewChild("remoteVideo",{ static: true }) remoteVideo:ElementRef;
+  @ViewChild("remoteVideo1",{ static: true }) remoteVideo1:ElementRef;
+  @ViewChild("remoteVideo2",{ static: true }) remoteVideo2:ElementRef;
+  @ViewChild("remoteVideo3",{ static: true }) remoteVideo3:ElementRef;
+  @ViewChild("remoteVideo4",{ static: true }) remoteVideo4:ElementRef;
+  @ViewChild("remoteVideo5",{ static: true }) remoteVideo5:ElementRef;
+
+
   // cornersX:any[] = []
   // cornersY:any[] = []
-  constructor(private httpClient:HttpClient) {
+  constructor(private httpClient:HttpClient,private common:CommonService) {
   }
   // ngAfterViewInit() {
   //   this.restrictive = this.position_restrictive_items()
@@ -88,10 +101,6 @@ export class MapComponentComponent implements OnInit{
       // // });
       // console.log(this.location)
     })
-    // if(this.polygon === undefined){
-    //   this.polygon = this.position_restrictive_items();
-    //   console.log('hello',this.polygon);
-    // }
     $(document).on('keydown', (e: any) => {
       const key_code = e.which || e.keyCode;
       const current_left = $('.my-character').css('left');
@@ -135,7 +144,57 @@ export class MapComponentComponent implements OnInit{
       }
       e.preventDefault();
     });
+    this.twilioToken();
 
+  }
+
+  ngAfterViewInit(){
+    this.common.twilio.localVideo = this.localVideo;
+    this.common.twilio.r.push(this.remoteVideo);
+    this.common.twilio.r.push(this.remoteVideo1);
+    this.common.twilio.r.push(this.remoteVideo2);
+    this.common.twilio.r.push(this.remoteVideo3);
+    this.common.twilio.r.push(this.remoteVideo4);
+    this.common.twilio.r.push(this.remoteVideo5);
+
+
+  }
+
+  twilioToken(){
+    console.log('hello')
+    let storage = JSON.parse(localStorage.getItem('token') || '{}');
+    let date = Date.now();
+    console.log('at down')
+    // if (storage['token'] && storage['created_at'] + 3600000 > date) {
+    //   console.log('in token')
+    //   this.access_token = storage['token'];
+    //   this.common.twilio.connectToRoom(this.access_token, 
+    //     { name: 'test', 
+    //       audio: true, 
+    //       video: { width: 240 } 
+    //     })
+    //   return;
+    // }
+
+    this.common._api.get(this.common._api.apiUrl+'/generateToken').subscribe((resp:any) => {
+      console.log(resp,'in the api part')
+      this.access_token = resp.data['token'];
+      console.log(this.access_token,'access_token')
+      // this.username = d['username'];
+      localStorage.setItem('token', JSON.stringify({
+        token: this.access_token,
+        // username:this.username,
+        created_at: date
+      }));
+
+      this.common.twilio.connectToRoom(this.access_token, 
+        { name: 'test', 
+          audio: true, 
+          video: { width: 240 } 
+        })
+    },
+      error => console.log(JSON.stringify(error)));
+    
   }
 
 
