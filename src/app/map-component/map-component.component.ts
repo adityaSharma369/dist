@@ -347,7 +347,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
     fromEvent(window, 'scroll').pipe(debounceTime(250), takeUntil(this.IsComponentDestroying)).subscribe(this.scroll_handler.bind(this));
 
     // $(document).on('keydown', this.keydown_handler);
-    // this.twilioToken();
+    this.twilioToken();
 
   }
 
