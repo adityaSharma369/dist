@@ -40,8 +40,8 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   characters = []
 
   my_location: any = {
-    x: 1000,
-    y: 300
+    x: 2760,
+    y: 760
   };
 
   character_width = 60;
@@ -110,7 +110,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   render_assets() {
-    this.httpClient.get('assets/location6.json').subscribe((data: any) => {
+    this.httpClient.get('assets/location8.json').subscribe((data: any) => {
       for (let index = 0; index < data.length; index++) {
         const element = data[index];
 

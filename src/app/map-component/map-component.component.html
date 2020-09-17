@@ -15,7 +15,7 @@
 
   <div class="stream-video-wrapper">
     <div style="top: 936px; left: 1664px; position: absolute; width: 728px; height: 314px; z-index: 100;">
-      <iframe width="728" height="314" src="https://www.youtube.com/embed/JSk3u0U4_eo?autoplay=1&controls=0"
+      <iframe width="728" height="314" src="https://www.youtube.com/embed/-B6_H6-kNEU?autoplay=1&controls=0"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen></iframe>
@@ -33,16 +33,9 @@
 
 
   <div class="restricted-wrapper">
-    <!-- <div class="tree"> -->
-    <div class="coconut_1">
-      <img src="assets/images/map_assets/Ferris_wheel_tree.png">
-    </div>
-    <div class="stage">
-      <img src="assets/images/map_assets/Stage/stage_new.png">
-    </div>
 
     <div *ngFor="let asset of asset_coord"
-         [ngStyle]="{'top':asset.top+'px','left':asset.left+'px','position':'absolute','width':asset.width+'px','height':asset.height+'px'}">
+         [ngStyle]="{'z-index':(asset.zIndex||2),'top':asset.top+'px','left':asset.left+'px','position':'absolute','width':asset.width+'px','height':asset.height+'px'}" >
       <img src="assets/images/map_assets/{{asset.image}}">
     </div>
 

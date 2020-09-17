@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   api_url: 'https://zappy.tericsoft.com/dev/api',
   // dev_api_url: 'http://zappy.tericsoft.com/dev/api',
-  // socket_url: '',
+  socket_url: '',
   localhost_url:'http://localhost:8083'
 };
 
