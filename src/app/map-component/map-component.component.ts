@@ -1,8 +1,9 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import * as $ from 'jquery';
 import {HttpClient} from '@angular/common/http'
 import {CommonService} from '../shared/services/common.service';
-import {Observable, fromEvent} from "rxjs";
+import {Observable, fromEvent, Subject,} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 
 interface Location {
@@ -18,11 +19,17 @@ interface Location {
   encapsulation: ViewEncapsulation.None
 })
 
-export class MapComponentComponent implements OnInit, AfterViewInit {
+export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  IsComponentDestroying: Subject<any> = new Subject<any>();
+
   polygon: any[] = [];
   asset_coord: any[] = [];
   access_token: any;
   character_animation_time = 50;
+
+  window_width = 0;
+  window_height = 0;
 
   characters = []
 
@@ -219,19 +226,41 @@ export class MapComponentComponent implements OnInit, AfterViewInit {
           top: proposed_position.y + 'px'
         }, this.character_animation_time);
 
-        console.log(proposed_position, "proposed")
-
         this.my_location = proposed_position;
+
+        this.resetMapScope(this.my_location);
 
       }
     }
+  }
+
+  resetMapScope(location) {
+    let scroll_left = $(document).scrollLeft();
+    let scroll_top = $(document).scrollTop();
+
+    const current_map_scope_left = this.window_width + scroll_left;
+    const current_map_scope_top = this.window_height + scroll_top;
+
+
+    console.log("window_height", this.window_height, this.window_width, this.my_location, current_map_scope_left, current_map_scope_top)
+  }
+
+  resize_handler(e) {
+    this.window_height = e.currentTarget.innerHeight;
+    this.window_width = e.currentTarget.innerWidth;
+  }
+
+  ngOnDestroy() {
+    this.IsComponentDestroying.next();
   }
 
   ngOnInit() {
 
     this.render_assets();
 
-    fromEvent(document.body, 'keydown').subscribe(this.keydown_handler.bind(this));
+    fromEvent(document.body, 'keydown').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.keydown_handler.bind(this));
+    fromEvent(window, 'resize').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.resize_handler.bind(this));
+    fromEvent(window, 'load').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.resize_handler.bind(this));
 
     // $(document).on('keydown', this.keydown_handler);
     this.twilioToken();
