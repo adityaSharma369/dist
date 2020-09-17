@@ -3,8 +3,7 @@ import * as $ from 'jquery';
 import {HttpClient} from '@angular/common/http'
 import {CommonService} from '../shared/services/common.service';
 import {Observable, fromEvent, Subject,} from "rxjs";
-import {takeUntil} from "rxjs/operators";
-
+import {debounceTime, takeUntil} from "rxjs/operators";
 
 interface Location {
   x: number,
@@ -26,13 +25,13 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   polygon: any[] = [];
   asset_coord: any[] = [];
   access_token: any;
-  character_animation_time = 50;
+  character_animation_time = 100;
 
   my_map_scope_box = {
-    left_top: {x: 0, y: 0},
-    right_top: {x: 0, y: 0},
-    left_bottom: {x: 0, y: 0},
-    right_bottom: {x: 0, y: 0}
+    top_left: {x: 0, y: 0},
+    top_right: {x: 0, y: 0},
+    bottom_left: {x: 0, y: 0},
+    bottom_right: {x: 0, y: 0}
   }
 
   window_width = 0;
@@ -41,8 +40,8 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   characters = []
 
   my_location: any = {
-    x: 50,
-    y: 100
+    x: 1000,
+    y: 300
   };
 
   character_width = 60;
@@ -51,7 +50,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   map_width = 2800;
   map_height = 2800;
 
-  step_count = 50;
+  step_count = 20;
 
   @ViewChild("localVideo", {static: true}) localVideo: ElementRef;
   @ViewChild("remoteVideo", {static: true}) remoteVideo: ElementRef;
@@ -86,10 +85,9 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   // }
 
   isInBox(p, box_edges) {
-    if (box_edges.top_left.x <= p.x && p.x <= box_edges.bottom_right.x && box_edges.top_left.y <= p.y && p.y <= box_edges.bottom_right.y) {
-      return true
-    }
-    return false
+    // console.log(p, box_edges.top_left, box_edges.bottom_right, "is in box")
+    return box_edges.top_left.x <= p.x && p.x <= box_edges.bottom_right.x && box_edges.top_left.y <= p.y && p.y <= box_edges.bottom_right.y;
+
   }
 
   isPointInPolygon(left, top) {
@@ -249,6 +247,8 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   resetMapScope(location) {
 
+    console.log(this.isInBox(this.my_location, this.my_map_scope_box), "isinbox")
+
     if (!this.isInBox(this.my_location, this.my_map_scope_box)) {
 
       let final_scroll = {}
@@ -262,17 +262,10 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
       let diff_x = this.my_location.x - center_x;
       let diff_y = this.my_location.y - center_y;
 
-      if (diff_x > 0) {
-        final_scroll['scrollLeft'] = (scroll_left + diff_x) + 'px'
-      } else if (diff_x < 0) {
-        final_scroll['scrollLeft'] = (scroll_left - diff_x) + 'px'
-      }
+      final_scroll['scrollLeft'] = (scroll_left + diff_x) + 'px';
+      final_scroll['scrollTop'] = (scroll_top + diff_y) + 'px';
 
-      if (diff_y > 0) {
-        final_scroll['scrollTop'] = (scroll_top + diff_y) + 'px'
-      } else if (diff_y < 0) {
-        final_scroll['scrollTop'] = (scroll_top - diff_y) + 'px'
-      }
+      console.log("need to scroll", diff_x, diff_y, final_scroll);
 
       $('html, body').dequeue().animate(final_scroll, this.character_animation_time);
     }
@@ -291,14 +284,14 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
     let center_y = scroll_top + (this.window_height / 2);
     let center_x = scroll_left + (this.window_width / 2);
 
-    let box_width = 0.3 * this.window_width;
-    let box_height = 0.3 * this.window_height;
+    let box_width = 0.2 * this.window_width;
+    let box_height = 0.2 * this.window_height;
 
     this.my_map_scope_box = {
-      left_top: {x: center_x - box_width, y: center_y - box_height},
-      right_top: {x: center_x + box_width, y: center_y - box_height},
-      left_bottom: {x: center_x - box_width, y: center_y + box_height},
-      right_bottom: {x: center_x + box_width, y: center_y + box_height},
+      top_left: {x: center_x - box_width, y: center_y - box_height},
+      top_right: {x: center_x + box_width, y: center_y - box_height},
+      bottom_left: {x: center_x - box_width, y: center_y + box_height},
+      bottom_right: {x: center_x + box_width, y: center_y + box_height},
     }
 
     console.log("this.my_map_scope_box", this.my_map_scope_box);
@@ -326,7 +319,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
     fromEvent(document.body, 'keydown').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.keydown_handler.bind(this));
     fromEvent(window, 'resize').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.resize_handler.bind(this));
     fromEvent(window, 'load').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.resize_handler.bind(this));
-    fromEvent(window, 'scroll').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.scroll_handler.bind(this));
+    fromEvent(window, 'scroll').pipe(debounceTime(250),takeUntil(this.IsComponentDestroying)).subscribe(this.scroll_handler.bind(this));
 
     // $(document).on('keydown', this.keydown_handler);
     this.twilioToken();
