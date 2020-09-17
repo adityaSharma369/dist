@@ -6,82 +6,89 @@
     width: 2800px;
     height: 2800px;
     overflow: hidden;
-    img{
+
+    img {
       width: 100%;
       height: 100%;
     }
   }
-  .my-character {
+
+  .character {
     // width: 40px;
     width: 60px;
     position: absolute;
-    // top: 300px;
-    // left: 300px;
-    top: 600px;
-    left: 600px;
-    z-index: 1;
+    z-index: 5;
   }
 
   .tree {
     width: 50%;
-    height:50%;
+    height: 50%;
     // img{
     //   width: 50%;
     //   height:50%;
     // }
   }
-  .coconut_1{
+
+  .coconut_1 {
     position: absolute;
-    width:652px;
-  
+    width: 652px;
+
   }
-  .stage{
+
+  .stage {
     position: absolute;
-    left:880px;
-    top:608px;
-    width:1080.5px;
+    left: 880px;
+    top: 608px;
+    width: 1080.5px;
     height: 1080.5px;
   }
-  .local_video{
+
+  .local_video {
     position: fixed;
-    left:1000px;
-    top:600px;
+    left: 1000px;
+    top: 600px;
   }
-  .remote_video{
+
+  .remote_video {
     position: fixed;
-    left:100px;
-    top:0px;
-    z-index:10;
+    left: 100px;
+    top: 0px;
+    z-index: 10;
   }
-  .remote_video1{
+
+  .remote_video1 {
     position: fixed;
-    left:300px;
-    top:0px;
-    z-index:10;
+    left: 300px;
+    top: 0px;
+    z-index: 10;
   }
-  .remote_video2{
+
+  .remote_video2 {
     position: fixed;
-    left:500px;
-    top:0px;
-    z-index:10;
+    left: 500px;
+    top: 0px;
+    z-index: 10;
   }
-  .remote_video3{
+
+  .remote_video3 {
     position: fixed;
-    left:700px;
-    top:0px;
-    z-index:10;
+    left: 700px;
+    top: 0px;
+    z-index: 10;
   }
-  .remote_video4{
+
+  .remote_video4 {
     position: fixed;
-    left:900;
-    top:0px;
-    z-index:10;
+    left: 900;
+    top: 0px;
+    z-index: 10;
   }
-  .remote_video5{
+
+  .remote_video5 {
     position: fixed;
-    left:1100px;
-    top:0px;
-    z-index:10;
+    left: 1100px;
+    top: 0px;
+    z-index: 10;
   }
 
   // overflow: hidden;

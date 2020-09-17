@@ -4,9 +4,6 @@
   </div>
 
   <div class="character-wrapper">
-    <div class="my-character">
-      <img src="assets/images/map_assets/Asset1.png">
-    </div>
   </div>
 
   <!-- <div class="interactive-wrapper">
@@ -17,98 +14,100 @@
 
   <div class="restricted-wrapper">
     <!-- <div class="tree"> -->
-      <div class="coconut_1">
-        <img src="assets/images/map_assets/Ferris_wheel_tree.png">
-      </div>
-      <div class="stage">
-        <img src="assets/images/map_assets/Stage/stage_new.png">
-      </div>
-      <!-- <div class="umbrella">
-        <img src="assets/images/map_assets/umbrella.png">
-      </div>
-      <div class="beach_chair">
-        <img src="assets/images/map_assets/beach_chair.png">
-      </div>
-      <div class="coconut_2x">
-        <img src="assets/images/map_assets/coconut_2x.png">
-      </div>
-      <div class="table">
-        <img src="assets/images/map_assets/table1.png">
-      </div>
-      <div class="top_chair">
-        <img src="assets/images/map_assets/top_chair.png">
-      </div>
-      <div class="bottom_chair">
-        <img src="assets/images/map_assets/bottom_chair.png">
-      </div>
-      <div class="left_chair">
-        <img src="assets/images/map_assets/left_chair.png">
-      </div>
-      <div class="right_chair">
-        <img src="assets/images/map_assets/right_chair.png">
-      </div>
-      <div class="tube">
-        <img src="assets/images/map_assets/tube.png">
-      </div>
-      <div class="table1">
-        <img src="assets/images/map_assets/table1.png">
-      </div>
-      <div class="top_chair1">
-        <img src="assets/images/map_assets/top_chair.png">
-      </div>
-      <div class="bottom_chair1">
-        <img src="assets/images/map_assets/bottom_chair.png">
-      </div>
-      <div class="left_chair1">
-        <img src="assets/images/map_assets/left_chair.png">
-      </div>
-      <div class="right_chair1">
-        <img src="assets/images/map_assets/right_chair.png">
-      </div>
-      <div class="top_mat">
-        <img src="assets/images/map_assets/top_mat.png">
-      </div>
-      <div class="bottom_mat">
-        <img src="assets/images/map_assets/bottom_mat.png">
-      </div>
-      <div class="left_mat">
-        <img src="assets/images/map_assets/left_mat.png">
-      </div>
-      <div class="right_mat">
-        <img src="assets/images/map_assets/right_mat.png">
-      </div> -->
-      <div *ngFor = "let tree of asset_coord" [ngStyle]="{'top':tree.top+'px','left':tree.left+'px','position':'absolute','width':tree.width+'px','height':tree.height+'px'}">
-        <img src = "assets/images/map_assets/{{tree.image}}.png">
-      </div>
-      <div *ngFor = "let area of polygon">
-        <div *ngFor = "let dot of area" [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red'}">
-
-        </div>
-      </div>
-      <div class="local_video" #localVideo>
+    <div class="coconut_1">
+      <img src="assets/images/map_assets/Ferris_wheel_tree.png">
+    </div>
+    <div class="stage">
+      <img src="assets/images/map_assets/Stage/stage_new.png">
+    </div>
+    <!-- <div class="umbrella">
+      <img src="assets/images/map_assets/umbrella.png">
+    </div>
+    <div class="beach_chair">
+      <img src="assets/images/map_assets/beach_chair.png">
+    </div>
+    <div class="coconut_2x">
+      <img src="assets/images/map_assets/coconut_2x.png">
+    </div>
+    <div class="table">
+      <img src="assets/images/map_assets/table1.png">
+    </div>
+    <div class="top_chair">
+      <img src="assets/images/map_assets/top_chair.png">
+    </div>
+    <div class="bottom_chair">
+      <img src="assets/images/map_assets/bottom_chair.png">
+    </div>
+    <div class="left_chair">
+      <img src="assets/images/map_assets/left_chair.png">
+    </div>
+    <div class="right_chair">
+      <img src="assets/images/map_assets/right_chair.png">
+    </div>
+    <div class="tube">
+      <img src="assets/images/map_assets/tube.png">
+    </div>
+    <div class="table1">
+      <img src="assets/images/map_assets/table1.png">
+    </div>
+    <div class="top_chair1">
+      <img src="assets/images/map_assets/top_chair.png">
+    </div>
+    <div class="bottom_chair1">
+      <img src="assets/images/map_assets/bottom_chair.png">
+    </div>
+    <div class="left_chair1">
+      <img src="assets/images/map_assets/left_chair.png">
+    </div>
+    <div class="right_chair1">
+      <img src="assets/images/map_assets/right_chair.png">
+    </div>
+    <div class="top_mat">
+      <img src="assets/images/map_assets/top_mat.png">
+    </div>
+    <div class="bottom_mat">
+      <img src="assets/images/map_assets/bottom_mat.png">
+    </div>
+    <div class="left_mat">
+      <img src="assets/images/map_assets/left_mat.png">
+    </div>
+    <div class="right_mat">
+      <img src="assets/images/map_assets/right_mat.png">
+    </div> -->
+    <div *ngFor="let tree of asset_coord"
+         [ngStyle]="{'top':tree.top+'px','left':tree.left+'px','position':'absolute','width':tree.width+'px','height':tree.height+'px'}">
+      <img src="assets/images/map_assets/{{tree.image}}.png">
+    </div>
+    <div *ngFor="let area of polygon">
+      <div *ngFor="let dot of area"
+           [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red'}">
 
       </div>
-      <div class="remote_video" #remoteVideo>
+    </div>
+    <div class="local_video" #localVideo>
 
-      </div>
-      <div class="remote_video1" #remoteVideo1>
-        
-      </div>
-      <div class="remote_video2" #remoteVideo2>
-        
-      </div>
-      <div class="remote_video3" #remoteVideo3>
-        
-      </div>
-      <div class="remote_video4" #remoteVideo4>
-        
-      </div>
-      <div class="remote_video5" #remoteVideo5>
-        
-      </div>
-      <div class="remote_video6" #remoteVideo6>
+    </div>
+    <div class="remote_video" #remoteVideo>
 
-      </div>
+    </div>
+    <div class="remote_video1" #remoteVideo1>
+
+    </div>
+    <div class="remote_video2" #remoteVideo2>
+
+    </div>
+    <div class="remote_video3" #remoteVideo3>
+
+    </div>
+    <div class="remote_video4" #remoteVideo4>
+
+    </div>
+    <div class="remote_video5" #remoteVideo5>
+
+    </div>
+    <div class="remote_video6" #remoteVideo6>
+
+    </div>
     <!-- </div> -->
     <!-- <div class = "another tree"> -->
     <!-- </div> -->
