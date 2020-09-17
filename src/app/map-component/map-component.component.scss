@@ -1,14 +1,14 @@
 .main-wrapper {
 
-  width: 2800px;
-  height: 2800px;
+  width: 5600px;
+  height: 5600px;
 
-  .character-wrapper, .interactive-wrapper, .restricted-wrapper, .stream-video-wrapper{
+  .character-wrapper, .interactive-wrapper, .restricted-wrapper, .stream-video-wrapper {
     position: absolute;
     top: 0;
     left: 0;
-    width: 2800px;
-    height: 2800px;
+    width: 5600px;
+    height: 5600px;
     overflow: hidden;
 
     img {
@@ -41,58 +41,46 @@
 
   .stage {
     position: absolute;
-    left: 880px;
-    top: 608px;
-    width: 1080.5px;
-    height: 1080.5px;
+    left: 1760px;
+    top: 1216px;
+    width: 2161px;
+    height: 2161px;
   }
 
   .local_video {
     position: fixed;
-    left: 1000px;
-    top: 600px;
+    left: calc(50% - 100px);
+    bottom: 0px;
+    z-index: 100;
+    opacity: 0.8;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    video{
+      width: 150px;
+    }
   }
 
-  .remote_video {
+  .remote_videos {
     position: fixed;
     left: 100px;
+    right: 100px;
     top: 0px;
-    z-index: 10;
-  }
+    z-index: 100;
+    opacity: 0.9;
+    //background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    video{
+      width: 200px;
+    }
+    .remote-video-item{
+      display: inline-flex;
 
-  .remote_video1 {
-    position: fixed;
-    left: 300px;
-    top: 0px;
-    z-index: 10;
-  }
-
-  .remote_video2 {
-    position: fixed;
-    left: 500px;
-    top: 0px;
-    z-index: 10;
-  }
-
-  .remote_video3 {
-    position: fixed;
-    left: 700px;
-    top: 0px;
-    z-index: 10;
-  }
-
-  .remote_video4 {
-    position: fixed;
-    left: 900;
-    top: 0px;
-    z-index: 10;
-  }
-
-  .remote_video5 {
-    position: fixed;
-    left: 1100px;
-    top: 0px;
-    z-index: 10;
+    }
   }
 
   // overflow: hidden;

@@ -47,18 +47,13 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   character_width = 60;
   character_height = 98;
 
-  map_width = 2800;
-  map_height = 2800;
+  map_width = 5600;
+  map_height = 5600;
 
-  step_count = 20;
+  step_count = 30;
 
   @ViewChild("localVideo", {static: true}) localVideo: ElementRef;
-  @ViewChild("remoteVideo", {static: true}) remoteVideo: ElementRef;
-  @ViewChild("remoteVideo1", {static: true}) remoteVideo1: ElementRef;
-  @ViewChild("remoteVideo2", {static: true}) remoteVideo2: ElementRef;
-  @ViewChild("remoteVideo3", {static: true}) remoteVideo3: ElementRef;
-  @ViewChild("remoteVideo4", {static: true}) remoteVideo4: ElementRef;
-  @ViewChild("remoteVideo5", {static: true}) remoteVideo5: ElementRef;
+  @ViewChild("remoteVideos", {static: true}) remoteVideos: ElementRef;
 
   // cornersX:any[] = []
   // cornersY:any[] = []
@@ -96,17 +91,18 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
     const y = top;
 
     for (let index = 0; index < this.polygon.length; index++) {
-      const element = this.polygon[index];
+      const element = this.polygon[index].restricted_polygon;
       let inside = false;
       for (var i = 0, j = element.length - 1; i < element.length; j = i++) {
-        let xi = element[i][0], yi = element[i][1];
-        let xj = element[j][0], yj = element[j][1];
+        let xi = (element[i][0]), yi = (element[i][1]);
+        let xj = (element[j][0]), yj = (element[j][1]);
 
         const intersect = ((yi > y) !== (yj > y))
           && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
         if (intersect) inside = !inside;
       }
       if (inside) {
+        console.log(left, top, this.polygon[index], "element is blocking")
         return inside;
       }
     }
@@ -114,31 +110,60 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   render_assets() {
-    this.httpClient.get('assets/location4.json').subscribe((data: any) => {
+    this.httpClient.get('assets/location6.json').subscribe((data: any) => {
       for (let index = 0; index < data.length; index++) {
         const element = data[index];
-        let p = element['restricted_polygon']
-        delete element['restricted_polygon']
-        this.asset_coord.push(element)
-        if (p.length > 0) {
-          this.polygon.push(p)
+
+        if(element.image.indexOf("Fire") > -1){
+          element.width = 50;
+          element.height = 56.5;
+          element.top -= 25;
+          // element.left -= 10;
         }
+
+        element.width *= 2;
+        element.height *= 2;
+        element.left *= 2;
+        element.top *= 2;
+
+
+        // let p = element['restricted_polygon']
+        if (element.restricted_polygon.length > 0) {
+          let new_items = []
+          element.restricted_polygon.forEach((item)=>{
+            let new_item = []
+            new_item[0] = item[0]*2;
+            new_item[1] = item[1]*2;
+            new_items.push(new_item)
+          });
+
+          element.restricted_polygon = new_items;
+
+          this.polygon.push(element)
+        }
+        // delete element['restricted_polygon']
+        this.asset_coord.push(element)
+
       }
     })
   }
 
   keydown_handler(e) {
-    e.preventDefault();
+    // e.preventDefault();
 
     const key_code = e.which || e.keyCode;
     let possible_conflicts = [];
     let is_within_map_boundary = false;
 
     let proposed_position: any = {};
+    let handle_keys = [37, 38, 39, 40];
+
+    if (handle_keys.indexOf(key_code) > -1) {
+      e.preventDefault();
+    }
 
     switch (key_code) {
       case 37: // left
-
         proposed_position = {
           x: this.my_location.x - this.step_count,
           y: this.my_location.y
@@ -247,7 +272,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   resetMapScope(location) {
 
-    console.log(this.isInBox(this.my_location, this.my_map_scope_box), "isinbox")
+    // console.log(this.isInBox(this.my_location, this.my_map_scope_box), "isinbox")
 
     if (!this.isInBox(this.my_location, this.my_map_scope_box)) {
 
@@ -265,7 +290,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
       final_scroll['scrollLeft'] = (scroll_left + diff_x) + 'px';
       final_scroll['scrollTop'] = (scroll_top + diff_y) + 'px';
 
-      console.log("need to scroll", diff_x, diff_y, final_scroll);
+      // console.log("need to scroll", diff_x, diff_y, final_scroll);
 
       $('html, body').dequeue().animate(final_scroll, this.character_animation_time);
     }
@@ -319,27 +344,21 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
     fromEvent(document.body, 'keydown').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.keydown_handler.bind(this));
     fromEvent(window, 'resize').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.resize_handler.bind(this));
     fromEvent(window, 'load').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.resize_handler.bind(this));
-    fromEvent(window, 'scroll').pipe(debounceTime(250),takeUntil(this.IsComponentDestroying)).subscribe(this.scroll_handler.bind(this));
+    fromEvent(window, 'scroll').pipe(debounceTime(250), takeUntil(this.IsComponentDestroying)).subscribe(this.scroll_handler.bind(this));
 
     // $(document).on('keydown', this.keydown_handler);
-    this.twilioToken();
+    // this.twilioToken();
 
   }
 
   ngAfterViewInit() {
     this.common.twilio.localVideo = this.localVideo;
-    this.common.twilio.r.push(this.remoteVideo);
-    this.common.twilio.r.push(this.remoteVideo1);
-    this.common.twilio.r.push(this.remoteVideo2);
-    this.common.twilio.r.push(this.remoteVideo3);
-    this.common.twilio.r.push(this.remoteVideo4);
-    this.common.twilio.r.push(this.remoteVideo5);
+    this.common.twilio.r.push(this.remoteVideos);
 
     this.spawn_character(this.my_location)
   }
 
   spawn_character(location: Location) {
-    console.log("mylocation inside spawsn", location);
 
     let character = {
       location: location,
@@ -405,7 +424,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
           {
             name: 'test',
             audio: true,
-            video: {width: 240}
+            video: {width: 320}
           })
       },
       error => console.log(JSON.stringify(error)));

@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://13.250.2.214:3500', // http://13.250.2.214:3500
-  dev_api_url: 'http://192.168.0.128:3500',
-  socket_url: '',
+  api_url: 'https://zappy.tericsoft.com/dev/api',
+  // dev_api_url: 'http://zappy.tericsoft.com/dev/api',
+  // socket_url: '',
   localhost_url:'http://localhost:8083'
 };
 

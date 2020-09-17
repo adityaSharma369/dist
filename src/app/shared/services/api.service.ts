@@ -20,17 +20,17 @@ export class ApiService {
     this.apiUrl = environment.api_url;
     const domainHost = window.location.hostname;
     switch (domainHost) {
-      case 'dev.teric.ai':
-        this.apiUrl = environment.dev_api_url;
-        break;
-      case 'teric.ai':
-        this.apiUrl = environment.api_url;
-        break;
-      case 'www.teric.ai':
-        this.apiUrl = environment.api_url;
-        break;
-      case 'localhost':
-        this.apiUrl = environment.localhost_url;
+      // case 'dev.teric.ai':
+      //   this.apiUrl = environment.dev_api_url;
+      //   break;
+      // case 'teric.ai':
+      //   this.apiUrl = environment.api_url;
+      //   break;
+      // case 'www.teric.ai':
+      //   this.apiUrl = environment.api_url;
+      //   break;
+      // case 'localhost':
+      //   this.apiUrl = environment.localhost_url;
     }
   }
 
