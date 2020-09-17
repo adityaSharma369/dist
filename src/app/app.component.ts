@@ -39,10 +39,10 @@ export class AppComponent {
       this._common._data.isAppOnline = status;
       // this._common._alert.showAlert('Network status changed ' + (status) ? 'Online' : 'Offline', 'info');
     });
-    this._server.checkLogin((resp) => {
-      if (resp && resp.success) {
-      }
-    });
+    // this._server.checkLogin((resp) => {
+    //   if (resp && resp.success) {
+    //   }
+    // });
 
     // track app navigation changes
     this._common._router.events.subscribe((event: RouterEvent) => {

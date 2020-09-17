@@ -15,7 +15,7 @@
 
   <div class="stream-video-wrapper">
     <div style="top: 936px; left: 1664px; position: absolute; width: 728px; height: 314px; z-index: 100;">
-      <iframe width="728" height="314" src="https://www.youtube.com/embed/-B6_H6-kNEU?autoplay=1&controls=0"
+      <iframe width="728" height="314" src="https://www.youtube.com/embed/-B6_H6-kNEU?autoplay=0&controls=0"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen></iframe>
@@ -39,11 +39,11 @@
       <img src="assets/images/map_assets/{{asset.image}}">
     </div>
 
-    <div *ngFor="let area of polygon">
-      <div *ngFor="let dot of area.restricted_polygon"
-           [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red'}">
-      </div>
-    </div>
+<!--    <div *ngFor="let area of polygon">-->
+<!--      <div *ngFor="let dot of area.restricted_polygon"-->
+<!--           [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red'}">-->
+<!--      </div>-->
+<!--    </div>-->
 
   </div>
 

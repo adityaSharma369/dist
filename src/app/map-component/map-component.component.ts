@@ -27,6 +27,8 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   access_token: any;
   character_animation_time = 100;
 
+  last_face_towards = "right";
+
   my_map_scope_box = {
     top_left: {x: 0, y: 0},
     top_right: {x: 0, y: 0},
@@ -114,7 +116,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
       for (let index = 0; index < data.length; index++) {
         const element = data[index];
 
-        if(element.image.indexOf("Fire") > -1){
+        if (element.image.indexOf("Fire") > -1) {
           element.width = 50;
           element.height = 56.5;
           element.top -= 25;
@@ -130,10 +132,10 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
         // let p = element['restricted_polygon']
         if (element.restricted_polygon.length > 0) {
           let new_items = []
-          element.restricted_polygon.forEach((item)=>{
+          element.restricted_polygon.forEach((item) => {
             let new_item = []
-            new_item[0] = item[0]*2;
-            new_item[1] = item[1]*2;
+            new_item[0] = item[0] * 2;
+            new_item[1] = item[1] * 2;
             new_items.push(new_item)
           });
 
@@ -151,9 +153,12 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   keydown_handler(e) {
     // e.preventDefault();
 
+    let character_animation_base = "assets/images/map_assets/character/";
+
     const key_code = e.which || e.keyCode;
     let possible_conflicts = [];
     let is_within_map_boundary = false;
+
 
     let proposed_position: any = {};
     let handle_keys = [37, 38, 39, 40];
@@ -161,6 +166,8 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
     if (handle_keys.indexOf(key_code) > -1) {
       e.preventDefault();
     }
+
+    let current_face_towards = "right";
 
     switch (key_code) {
       case 37: // left
@@ -180,9 +187,13 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         is_within_map_boundary = this.my_location.x - this.step_count > 0
+        current_face_towards = "left";
+
 
         break;
       case 38: // up
+
+        current_face_towards = "up";
 
         proposed_position = {
           x: this.my_location.x,
@@ -200,6 +211,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         is_within_map_boundary = this.my_location.y - this.step_count > 0
+
 
         break;
       case 39: // right
@@ -221,6 +233,9 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
 
         is_within_map_boundary = this.my_location.x + this.character_width + this.step_count < this.map_width;
 
+        current_face_towards = "right";
+
+
         break;
       case 40: // down
 
@@ -241,10 +256,19 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
 
         is_within_map_boundary = this.my_location.y + this.character_height + this.step_count < this.map_height;
 
+        current_face_towards = "down";
+
         break;
       default:
         return; // exit this handler for other keys
     }
+
+    if (current_face_towards != this.last_face_towards) {
+      $('.character-wrapper img').attr('src', character_animation_base + current_face_towards + '.gif');
+    }
+
+    this.last_face_towards = current_face_towards;
+
 
     if (is_within_map_boundary) {
 
@@ -362,7 +386,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let character = {
       location: location,
-      icon: "assets/images/map_assets/Asset1.png",
+      icon: "assets/images/map_assets/character/right.gif",
       id: Math.random()
     }
     this.characters.push(character);
@@ -370,6 +394,8 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.render_characters(this.characters, () => {
       // all characters rendered. update location
       // this.update_character_position(character.id, location);
+      this.resetMapScope(this.my_location);
+
     });
   }
 
