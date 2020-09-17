@@ -28,6 +28,13 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   access_token: any;
   character_animation_time = 50;
 
+  my_map_scope_box = {
+    left_top: {x: 0, y: 0},
+    right_top: {x: 0, y: 0},
+    left_bottom: {x: 0, y: 0},
+    right_bottom: {x: 0, y: 0}
+  }
+
   window_width = 0;
   window_height = 0;
 
@@ -45,7 +52,6 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   map_height = 2800;
 
   step_count = 50;
-
 
   @ViewChild("localVideo", {static: true}) localVideo: ElementRef;
   @ViewChild("remoteVideo", {static: true}) remoteVideo: ElementRef;
@@ -78,6 +84,13 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   //   return new_restricitve;
 
   // }
+
+  isInBox(p, box_edges) {
+    if (box_edges.top_left.x <= p.x && p.x <= box_edges.bottom_right.x && box_edges.top_left.y <= p.y && p.y <= box_edges.bottom_right.y) {
+      return true
+    }
+    return false
+  }
 
   isPointInPolygon(left, top) {
 
@@ -235,19 +248,71 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   resetMapScope(location) {
+
+    if (!this.isInBox(this.my_location, this.my_map_scope_box)) {
+
+      let final_scroll = {}
+
+      let scroll_left = $(document).scrollLeft();
+      let scroll_top = $(document).scrollTop();
+
+      let center_y = scroll_top + (this.window_height / 2);
+      let center_x = scroll_left + (this.window_width / 2);
+
+      let diff_x = this.my_location.x - center_x;
+      let diff_y = this.my_location.y - center_y;
+
+      if (diff_x > 0) {
+        final_scroll['scrollLeft'] = (scroll_left + diff_x) + 'px'
+      } else if (diff_x < 0) {
+        final_scroll['scrollLeft'] = (scroll_left - diff_x) + 'px'
+      }
+
+      if (diff_y > 0) {
+        final_scroll['scrollTop'] = (scroll_top + diff_y) + 'px'
+      } else if (diff_y < 0) {
+        final_scroll['scrollTop'] = (scroll_top - diff_y) + 'px'
+      }
+
+      $('html, body').dequeue().animate(final_scroll, this.character_animation_time);
+    }
+
+    // if (this.my_location.y > 0.8 * current_map_scope_top) {
+    //   console.log("scroll bottom")
+    // }
+    // console.log("window_height", this.window_height, this.window_width, this.my_location, current_map_scope_left, current_map_scope_top)
+  }
+
+  reset_scope_box() {
+    // if my location then generate my_map_scope_box
     let scroll_left = $(document).scrollLeft();
     let scroll_top = $(document).scrollTop();
 
-    const current_map_scope_left = this.window_width + scroll_left;
-    const current_map_scope_top = this.window_height + scroll_top;
+    let center_y = scroll_top + (this.window_height / 2);
+    let center_x = scroll_left + (this.window_width / 2);
 
+    let box_width = 0.3 * this.window_width;
+    let box_height = 0.3 * this.window_height;
 
-    console.log("window_height", this.window_height, this.window_width, this.my_location, current_map_scope_left, current_map_scope_top)
+    this.my_map_scope_box = {
+      left_top: {x: center_x - box_width, y: center_y - box_height},
+      right_top: {x: center_x + box_width, y: center_y - box_height},
+      left_bottom: {x: center_x - box_width, y: center_y + box_height},
+      right_bottom: {x: center_x + box_width, y: center_y + box_height},
+    }
+
+    console.log("this.my_map_scope_box", this.my_map_scope_box);
+
   }
 
   resize_handler(e) {
     this.window_height = e.currentTarget.innerHeight;
     this.window_width = e.currentTarget.innerWidth;
+    this.reset_scope_box()
+  }
+
+  scroll_handler(e) {
+    this.reset_scope_box()
   }
 
   ngOnDestroy() {
@@ -261,6 +326,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
     fromEvent(document.body, 'keydown').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.keydown_handler.bind(this));
     fromEvent(window, 'resize').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.resize_handler.bind(this));
     fromEvent(window, 'load').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.resize_handler.bind(this));
+    fromEvent(window, 'scroll').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.scroll_handler.bind(this));
 
     // $(document).on('keydown', this.keydown_handler);
     this.twilioToken();
@@ -280,7 +346,8 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   spawn_character(location: Location) {
-    console.log("mylocation inside spawsn", location)
+    console.log("mylocation inside spawsn", location);
+
     let character = {
       location: location,
       icon: "assets/images/map_assets/Asset1.png",
