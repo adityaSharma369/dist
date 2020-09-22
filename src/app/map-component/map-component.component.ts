@@ -26,6 +26,10 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   asset_coord: any[] = [];
   access_token: any;
   character_animation_time = 100;
+  amplify_step_count = 2;
+
+  asset_scale = 2;
+  character_animation_base = "assets/images/map_assets/character/";
 
   my_state = {
     id: "my_character",
@@ -43,10 +47,10 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
       bottom_left: {x: 0, y: 0},
       bottom_right: {x: 0, y: 0}
     },
-    step_count: 30
+    step_count: 20
   }
 
-  characters = [];
+  characters = {};
 
   window_width = 0;
   window_height = 0;
@@ -105,18 +109,18 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
           // element.left -= 10;
         }
 
-        element.width *= 2;
-        element.height *= 2;
-        element.left *= 2;
-        element.top *= 2;
+        element.width *= this.asset_scale;
+        element.height *= this.asset_scale;
+        element.left *= this.asset_scale;
+        element.top *= this.asset_scale;
 
         // let p = element['restricted_polygon']
         if (element.restricted_polygon.length > 0) {
           let new_items = []
           element.restricted_polygon.forEach((item) => {
             let new_item = []
-            new_item[0] = item[0] * 2;
-            new_item[1] = item[1] * 2;
+            new_item[0] = item[0] * this.asset_scale;
+            new_item[1] = item[1] * this.asset_scale;
             new_items.push(new_item)
           });
 
@@ -134,8 +138,6 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
   keydown_handler(e) {
     // e.preventDefault();
 
-    let character_animation_base = "assets/images/map_assets/character/";
-
     const key_code = e.which || e.keyCode;
     let possible_conflicts = [];
     let is_within_map_boundary = false;
@@ -149,10 +151,12 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let current_face_towards = "right";
 
+    console.log(key_code, "this is key_code");
+
     switch (key_code) {
       case 37: // left
         proposed_position = {
-          x: this.my_state.location.x - this.my_state.step_count,
+          x: this.my_state.location.x - this.my_state.step_count * this.amplify_step_count,
           y: this.my_state.location.y
         }
 
@@ -177,7 +181,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
 
         proposed_position = {
           x: this.my_state.location.x,
-          y: this.my_state.location.y - this.my_state.step_count
+          y: this.my_state.location.y - this.my_state.step_count * this.amplify_step_count
         }
 
         possible_conflicts.push({
@@ -197,7 +201,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
       case 39: // right
 
         proposed_position = {
-          x: this.my_state.location.x + this.my_state.step_count,
+          x: this.my_state.location.x + this.my_state.step_count * this.amplify_step_count,
           y: this.my_state.location.y
         }
 
@@ -220,7 +224,7 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
 
         proposed_position = {
           x: this.my_state.location.x,
-          y: this.my_state.location.y + this.my_state.step_count
+          y: this.my_state.location.y + this.my_state.step_count * this.amplify_step_count
         }
 
         possible_conflicts.push({
@@ -238,12 +242,18 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
         current_face_towards = "down";
 
         break;
+
+      case 77:
+        let tmp_location = this.characters['character1'].location;
+        tmp_location.x += 50;
+        this.update_character_position("character1", tmp_location, 100);
+        break
       default:
         return; // exit this handler for other keys
     }
 
     if (current_face_towards != this.my_state.face_towards) {
-      $('#my_character img').attr('src', character_animation_base + current_face_towards + '.gif');
+      $('#my_character img').attr('src', this.character_animation_base + this.my_state.character + "/" + current_face_towards + '.gif');
     }
 
     this.my_state.face_towards = current_face_towards;
@@ -261,7 +271,8 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
           is_proposed_position_valid = false
           return;
         }
-        this.characters.forEach((character) => {
+        Object.keys(this.characters).forEach((character_id) => {
+          const character = this.characters[character_id];
           const char_box = {
             top_left: character.location,
             bottom_right: {
@@ -286,6 +297,19 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
         this.resetMapScope(this.my_state.location);
 
       }
+    }
+  }
+
+  keyup_handler(e) {
+    const key_code = e.which || e.keyCode;
+
+    switch (key_code) {
+      case 37:
+      case 38:
+      case 39:
+      case 40:
+        $('#my_character img').attr('src', this.character_animation_base + this.my_state.character + "/" + this.my_state.face_towards + '_static.gif');
+        break
     }
   }
 
@@ -358,12 +382,13 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.render_assets();
 
     fromEvent(document.body, 'keydown').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.keydown_handler.bind(this));
+    fromEvent(document.body, 'keyup').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.keyup_handler.bind(this));
     fromEvent(window, 'resize').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.resize_handler.bind(this));
     fromEvent(window, 'load').pipe(takeUntil(this.IsComponentDestroying)).subscribe(this.resize_handler.bind(this));
     fromEvent(window, 'scroll').pipe(debounceTime(250), takeUntil(this.IsComponentDestroying)).subscribe(this.scroll_handler.bind(this));
 
     // $(document).on('keydown', this.keydown_handler);
-    this.twilioToken();
+    // this.twilioToken();
 
   }
 
@@ -391,25 +416,22 @@ export class MapComponentComponent implements OnInit, AfterViewInit, OnDestroy {
       step_count: 30
     }
 
-    this.characters.push(character1);
+    this.characters[character1.id] = character1;
 
     this.spawn_character(character1, null);
   }
 
   spawn_character(character, cb) {
-    let character_animation_base = "assets/images/map_assets/character/";
     const jquery_character_wrapper = $('.character-wrapper');
-    jquery_character_wrapper.append('<div style="top:' + character.location.y + 'px;left:' + character.location.x + 'px" id="' + character.id + '" class="character"> <img src="' + character_animation_base + character.face_towards + '.gif' + '"  > </div>');
+    jquery_character_wrapper.append('<div style="top:' + character.location.y + 'px;left:' + character.location.x + 'px" id="' + character.id + '" class="character"> <img src="' + this.character_animation_base + character.character + "/" + character.face_towards + '.gif' + '"  > </div>');
     if (cb) {
       cb();
     }
   }
 
-  update_character_position(char_id, location
-    :
-    Location, animate = this.character_animation_time
+  update_character_position(char_id, location, animate = this.character_animation_time
   ) {
-    console.log(location, "spawn loction")
+    this.characters[char_id].location = location;
     $('.character#' + char_id).dequeue().animate({
       left: location.x + 'px',
       top: location.y + 'px'
