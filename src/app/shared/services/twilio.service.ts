@@ -21,7 +21,6 @@ export class TwilioService {
     this.person = new Map();
     this.another = new Map();
     this.count = 0;
-    console.log(this.person, 'thsss');
   }
 
   dynamic_users = {};

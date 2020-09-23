@@ -22,9 +22,9 @@ import {AppThemeModule} from './layouts/app-layout/app-theme/app-theme.module';
 import {AppLayoutComponent} from './layouts/app-layout/app-layout.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {AuthLayoutComponent} from './layouts/auth-layout/auth-layout.component';
-// import { MapLayoutComponent } from './layouts/map-layout/map-layout.component';
-import { MapComponentComponent } from './map-component/map-component.component';
-import { TwilioService } from './shared/services/twilio.service';
+import {TwilioService} from './shared/services/twilio.service';
+import {RoomComponent} from './room/room.component';
+import {SocketService} from './shared/services/socket.service';
 
 @NgModule({
   declarations: [
@@ -32,8 +32,7 @@ import { TwilioService } from './shared/services/twilio.service';
     AppLayoutComponent,
     AuthLayoutComponent,
     DashboardComponent,
-    // MapLayoutComponent,
-    MapComponentComponent,
+    RoomComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,12 +43,21 @@ import { TwilioService } from './shared/services/twilio.service';
   ],
   providers: [
     // App Services
-    AuthService, DataService, CommonService, ServerService, ApiService,
-    AlertService, MenuItemsService,TwilioService,
-    // SocketService, WebSocketsService,
+    AuthService,
+    DataService,
+    CommonService,
+    ServerService,
+    ApiService,
+    AlertService,
+    MenuItemsService,
+    TwilioService,
+    SocketService,
+    // WebSocketsService,
 
     // Route Guards
-    AuthGuard, NonAuthGuard, RoleGuard,
+    AuthGuard,
+    NonAuthGuard,
+    RoleGuard,
 
     // Angular
     Title,

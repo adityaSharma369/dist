@@ -34,7 +34,7 @@
 
   <div class="restricted-wrapper">
 
-    <div *ngFor="let asset of asset_coord"
+    <div *ngFor="let asset of assetCoords"
          [ngStyle]="{'z-index':(asset.zIndex||2),'top':asset.top+'px','left':asset.left+'px','position':'absolute','width':asset.width+'px','height':asset.height+'px'}" >
       <img src="assets/images/map_assets/{{asset.image}}">
     </div>
