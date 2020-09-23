@@ -47,35 +47,33 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   roomId: string;
   roomTitle: string;
   roomLoginDetails: RoomLoginDetails;
-
   isComponentDestroying: Subject<any> = new Subject<any>();
 
   polygon: any[] = [];
   assetCoords: any[] = [];
   access_token: any;
-  character_animation_time = 100;
-  amplify_step_count = 2;
-
-  asset_scale = 2;
-  character_animation_base = 'assets/images/map_assets/character/';
 
   characterConfig = {
+    character_animation_base: 'assets/images/map_assets/character/',
     character_width: 60,
-    character_height: 98
+    character_height: 98,
+    character_animation_time: 100,
+    step_count: 20,
+    amplify_step_count: 2
   };
 
   mapConfig = {
+    asset_scale: 2,
     my_map_scope_box: {
       top_left: {x: 0, y: 0},
       top_right: {x: 0, y: 0},
       bottom_left: {x: 0, y: 0},
       bottom_right: {x: 0, y: 0}
     },
-    step_count: 20
   };
 
-  my_state; 
-  characters = {};
+  my_attendee: Attendee;
+  attendees = {};
 
   window_width = 0;
   window_height = 0;
@@ -121,7 +119,6 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.render_assets();
 
     fromEvent(document.body, 'keydown').pipe(takeUntil(this.isComponentDestroying)).subscribe(this.keydown_handler.bind(this));
-    fromEvent(document.body, 'keyup').pipe(takeUntil(this.isComponentDestroying)).subscribe(this.keyup_handler.bind(this));
     fromEvent(window, 'resize').pipe(takeUntil(this.isComponentDestroying)).subscribe(this.resize_handler.bind(this));
     fromEvent(window, 'load').pipe(takeUntil(this.isComponentDestroying)).subscribe(this.resize_handler.bind(this));
     fromEvent(window, 'scroll').pipe(debounceTime(250), takeUntil(this.isComponentDestroying)).subscribe(this.scroll_handler.bind(this));
@@ -160,21 +157,19 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addMe(attendee: Attendee) {
-    this.my_state = {...attendee};
-    this.spawn_character(this.my_state, () => {
-      this.resetMapScope(this.my_state.location);
+    this.my_attendee = attendee;
+    this.spawn_attendee(this.my_attendee, () => {
+      this.resetMapScope(this.my_attendee.last_state.location);
     });
   }
 
   addNewAttendee(attendee: Attendee) {
-    const character = {...attendee};
-    this.characters[character.tmp_user_id] = character;
-    this.spawn_character(character, null);
+    this.attendees[attendee.tmp_user_id] = attendee;
+    this.spawn_attendee(attendee, null);
   }
 
 
   isInBox(p, box_edges) {
-    // console.log(p, box_edges.top_left, box_edges.bottom_right, "is in box")
     return box_edges.top_left.x <= p.x && p.x <= box_edges.bottom_right.x && box_edges.top_left.y <= p.y && p.y <= box_edges.bottom_right.y;
 
   }
@@ -219,18 +214,18 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
           // element.left -= 10;
         }
 
-        element.width *= this.asset_scale;
-        element.height *= this.asset_scale;
-        element.left *= this.asset_scale;
-        element.top *= this.asset_scale;
+        element.width *= this.mapConfig.asset_scale;
+        element.height *= this.mapConfig.asset_scale;
+        element.left *= this.mapConfig.asset_scale;
+        element.top *= this.mapConfig.asset_scale;
 
         // let p = element['restricted_polygon']
         if (element.restricted_polygon.length > 0) {
           let new_items = [];
           element.restricted_polygon.forEach((item) => {
             let new_item = [];
-            new_item[0] = item[0] * this.asset_scale;
-            new_item[1] = item[1] * this.asset_scale;
+            new_item[0] = item[0] * this.mapConfig.asset_scale;
+            new_item[1] = item[1] * this.mapConfig.asset_scale;
             new_items.push(new_item);
           });
 
@@ -245,8 +240,12 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  timer = {
+    "attendee_id": 0,
+  }
+
+
   keydown_handler(e) {
-    // e.preventDefault();
 
     const key_code = e.which || e.keyCode;
     const possible_conflicts = [];
@@ -261,26 +260,24 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let current_face_towards = 'right';
 
-    console.log(key_code, 'this is key_code');
-
     switch (key_code) {
       case 37: // left
         proposed_position = {
-          x: this.my_state.location.x - this.my_state.step_count * this.amplify_step_count,
-          y: this.my_state.location.y
+          x: this.my_attendee.last_state.location.x - this.characterConfig.step_count * this.characterConfig.amplify_step_count,
+          y: this.my_attendee.last_state.location.y
         };
 
         possible_conflicts.push({
-          x: this.my_state.location.x - this.my_state.step_count,
-          y: this.my_state.location.y
+          x: this.my_attendee.last_state.location.x - this.characterConfig.step_count,
+          y: this.my_attendee.last_state.location.y
         });
 
         possible_conflicts.push({
-          x: this.my_state.location.x - this.my_state.step_count,
-          y: this.my_state.location.y + this.my_state.character_height
+          x: this.my_attendee.last_state.location.x - this.characterConfig.step_count,
+          y: this.my_attendee.last_state.location.y + this.characterConfig.character_height
         });
 
-        is_within_map_boundary = this.my_state.location.x - this.my_state.step_count > 0;
+        is_within_map_boundary = this.my_attendee.last_state.location.x - this.characterConfig.step_count > 0;
         current_face_towards = 'left';
 
 
@@ -290,42 +287,42 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         current_face_towards = 'up';
 
         proposed_position = {
-          x: this.my_state.location.x,
-          y: this.my_state.location.y - this.my_state.step_count * this.amplify_step_count
+          x: this.my_attendee.last_state.location.x,
+          y: this.my_attendee.last_state.location.y - this.characterConfig.step_count * this.characterConfig.amplify_step_count
         };
 
         possible_conflicts.push({
-          x: this.my_state.location.x,
-          y: this.my_state.location.y - this.my_state.step_count
+          x: this.my_attendee.last_state.location.x,
+          y: this.my_attendee.last_state.location.y - this.characterConfig.step_count
         });
 
         possible_conflicts.push({
-          x: this.my_state.location.x + this.my_state.character_width,
-          y: this.my_state.location.y - this.my_state.step_count
+          x: this.my_attendee.last_state.location.x + this.characterConfig.character_width,
+          y: this.my_attendee.last_state.location.y - this.characterConfig.step_count
         });
 
-        is_within_map_boundary = this.my_state.location.y - this.my_state.step_count > 0;
+        is_within_map_boundary = this.my_attendee.last_state.location.y - this.characterConfig.step_count > 0;
 
 
         break;
       case 39: // right
 
         proposed_position = {
-          x: this.my_state.location.x + this.my_state.step_count * this.amplify_step_count,
-          y: this.my_state.location.y
+          x: this.my_attendee.last_state.location.x + this.characterConfig.step_count * this.characterConfig.amplify_step_count,
+          y: this.my_attendee.last_state.location.y
         };
 
         possible_conflicts.push({
-          x: this.my_state.location.x + this.my_state.character_width + this.my_state.step_count,
-          y: this.my_state.location.y
+          x: this.my_attendee.last_state.location.x + this.characterConfig.character_width + this.characterConfig.step_count,
+          y: this.my_attendee.last_state.location.y
         });
 
         possible_conflicts.push({
-          x: this.my_state.location.x + this.my_state.character_width + this.my_state.step_count,
-          y: this.my_state.location.y + this.my_state.character_height
+          x: this.my_attendee.last_state.location.x + this.characterConfig.character_width + this.characterConfig.step_count,
+          y: this.my_attendee.last_state.location.y + this.characterConfig.character_height
         });
 
-        is_within_map_boundary = this.my_state.location.x + this.my_state.character_width + this.my_state.step_count < this.map_width;
+        is_within_map_boundary = this.my_attendee.last_state.location.x + this.characterConfig.character_width + this.characterConfig.step_count < this.map_width;
 
         current_face_towards = 'right';
 
@@ -333,28 +330,28 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
       case 40: // down
 
         proposed_position = {
-          x: this.my_state.location.x,
-          y: this.my_state.location.y + this.my_state.step_count * this.amplify_step_count
+          x: this.my_attendee.last_state.location.x,
+          y: this.my_attendee.last_state.location.y + this.characterConfig.step_count * this.characterConfig.amplify_step_count
         };
 
         possible_conflicts.push({
-          x: this.my_state.location.x,
-          y: this.my_state.location.y + this.my_state.character_height + this.my_state.step_count
+          x: this.my_attendee.last_state.location.x,
+          y: this.my_attendee.last_state.location.y + this.characterConfig.character_height + this.characterConfig.step_count
         });
 
         possible_conflicts.push({
-          x: this.my_state.location.x + this.my_state.character_width,
-          y: this.my_state.location.y + this.my_state.character_height + this.my_state.step_count
+          x: this.my_attendee.last_state.location.x + this.characterConfig.character_width,
+          y: this.my_attendee.last_state.location.y + this.characterConfig.character_height + this.characterConfig.step_count
         });
 
-        is_within_map_boundary = this.my_state.location.y + this.my_state.character_height + this.my_state.step_count < this.map_height;
+        is_within_map_boundary = this.my_attendee.last_state.location.y + this.characterConfig.character_height + this.characterConfig.step_count < this.map_height;
 
         current_face_towards = 'down';
 
         break;
 
       case 77:
-        const tmp_location = this.characters['character1'].location;
+        const tmp_location = this.attendees['character1'].location;
         tmp_location.x += 50;
         this.update_character_position('character1', tmp_location, 100);
         break;
@@ -362,11 +359,11 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         return; // exit this handler for other keys
     }
 
-    if (current_face_towards !== this.my_state.face_towards) {
-      $('#my_character img').attr('src', this.character_animation_base + this.my_state.character + '/' + current_face_towards + '.gif');
+    if (current_face_towards !== this.my_attendee.last_state.face_towards) {
+      $('#' + this.my_attendee.tmp_user_id + ' img').attr('src', this.characterConfig.character_animation_base + this.my_attendee.last_state.user_character + '/' + current_face_towards + '.gif');
     }
 
-    this.my_state.face_towards = current_face_towards;
+    this.my_attendee.last_state.face_towards = current_face_towards;
 
     if (is_within_map_boundary) {
 
@@ -381,13 +378,13 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
           is_proposed_position_valid = false;
           return;
         }
-        Object.keys(this.characters).forEach((character_id) => {
-          const character = this.characters[character_id];
+        Object.keys(this.attendees).forEach((character_id) => {
+          const attendee = this.attendees[character_id];
           const char_box = {
-            top_left: character.location,
+            top_left: attendee.last_state.location,
             bottom_right: {
-              x: character.location.x + character.character_width,
-              y: character.location.y + character.character_height
+              x: attendee.last_state.location.x + this.characterConfig.character_width,
+              y: attendee.last_state.location.y + this.characterConfig.character_height
             },
           };
           if (this.isInBox(position, char_box)) {
@@ -398,37 +395,32 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
       if (is_proposed_position_valid) {
-        $('#my_character').dequeue().animate({
+        $('#' + this.my_attendee.tmp_user_id).dequeue().animate({
           left: proposed_position.x + 'px',
           top: proposed_position.y + 'px'
-        }, this.character_animation_time);
+        }, this.characterConfig.character_animation_time);
 
-        this.my_state.location = proposed_position;
-        this.resetMapScope(this.my_state.location);
+        this.my_attendee.last_state.location = proposed_position;
+        this.resetMapScope(this.my_attendee.last_state.location);
+
+        // used to transition from walking animation to static image
+        if (this.timer[this.my_attendee.tmp_user_id]) {
+          clearTimeout(this.timer[this.my_attendee.tmp_user_id])
+        }
+        this.timer[this.my_attendee.tmp_user_id] = setTimeout(() => {
+          $('#' + this.my_attendee.tmp_user_id + ' img').attr('src', this.characterConfig.character_animation_base + this.my_attendee.last_state.user_character + '/' + this.my_attendee.last_state.face_towards + '_static.gif');
+        }, 1000);
 
       }
     }
   }
 
-  keyup_handler(e) {
-    const key_code = e.which || e.keyCode;
-
-    switch (key_code) {
-      case 37:
-      case 38:
-      case 39:
-      case 40:
-        // tslint:disable-next-line:max-line-length
-        $('#my_character img').attr('src', this.character_animation_base + this.my_state.character + '/' + this.my_state.face_towards + '_static.gif');
-        break;
-    }
-  }
 
   resetMapScope(location) {
 
-    // console.log(this.isInBox(this.my_state.location, this.my_state.my_map_scope_box), "isinbox")
+    // console.log(this.isInBox(this.my_attendee.last_state.location, this.mapConfig.my_map_scope_box), "isinbox")
 
-    if (!this.isInBox(this.my_state.location, this.my_state.my_map_scope_box)) {
+    if (!this.isInBox(this.my_attendee.last_state.location, this.mapConfig.my_map_scope_box)) {
 
       const final_scroll = {};
 
@@ -438,25 +430,21 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
       const center_y = scroll_top + (this.window_height / 2);
       const center_x = scroll_left + (this.window_width / 2);
 
-      const diff_x = this.my_state.location.x - center_x;
-      const diff_y = this.my_state.location.y - center_y;
+      const diff_x = this.my_attendee.last_state.location.x - center_x;
+      const diff_y = this.my_attendee.last_state.location.y - center_y;
 
       final_scroll['scrollLeft'] = (scroll_left + diff_x) + 'px';
       final_scroll['scrollTop'] = (scroll_top + diff_y) + 'px';
 
       // console.log("need to scroll", diff_x, diff_y, final_scroll);
 
-      $('html, body').dequeue().animate(final_scroll, this.character_animation_time);
+      $('html, body').dequeue().animate(final_scroll, this.characterConfig.character_animation_time);
     }
 
-    // if (this.my_state.location.y > 0.8 * current_map_scope_top) {
-    //   console.log("scroll bottom")
-    // }
-    // console.log("window_height", this.window_height, this.window_width, this.my_state.location, current_map_scope_left, current_map_scope_top)
   }
 
   reset_scope_box() {
-    // if my location then generate my_state.my_map_scope_box
+    // if my location then generate mapConfig.my_map_scope_box
     const scroll_left = $(document).scrollLeft();
     const scroll_top = $(document).scrollTop();
 
@@ -466,7 +454,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     const box_width = 0 * this.window_width;
     const box_height = 0 * this.window_height;
 
-    this.my_state.my_map_scope_box = {
+    this.mapConfig.my_map_scope_box = {
       top_left: {x: center_x - box_width, y: center_y - box_height},
       top_right: {x: center_x + box_width, y: center_y - box_height},
       bottom_left: {x: center_x - box_width, y: center_y + box_height},
@@ -485,18 +473,18 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  spawn_character(character, cb) {
+  spawn_attendee(attendee: Attendee, cb) {
     const jquery_character_wrapper = $('.character-wrapper');
     // tslint:disable-next-line:max-line-length
-    jquery_character_wrapper.append('<div style="top:' + character.location.y + 'px;left:' + character.location.x + 'px" id="' + character.id + '" class="character"> <img src="' + this.character_animation_base + character.character + '/' + character.face_towards + '.gif' + '"  > </div>');
+    jquery_character_wrapper.append('<div style="top:' + attendee.last_state.location.y + 'px;left:' + attendee.last_state.location.x + 'px" id="' + attendee.tmp_user_id + '" class="character"> <img src="' + this.characterConfig.character_animation_base + attendee.last_state.user_character + '/' + attendee.last_state.face_towards + '.gif' + '"  > </div>');
     if (cb) {
       cb();
     }
   }
 
-  update_character_position(char_id, location, animate = this.character_animation_time
+  update_character_position(char_id, location, animate = this.characterConfig.character_animation_time
   ) {
-    this.characters[char_id].location = location;
+    this.attendees[char_id].location = location;
     $('.character#' + char_id).dequeue().animate({
       left: location.x + 'px',
       top: location.y + 'px'
