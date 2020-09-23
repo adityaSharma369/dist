@@ -47,7 +47,10 @@ export class TwilioService {
         let user_uid = participant.identity;
         const elem = document.getElementById('remote-video-' + user_uid);
 
-        elem.setAttribute("class", "remote-video-item fade-out");
+        if (elem) {
+            elem.setAttribute("class", "remote-video-item fade-out");
+        }
+
 
         setTimeout(() => {
             if (elem) {

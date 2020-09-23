@@ -16,7 +16,7 @@
 
     <div class="stream-video-wrapper">
         <div [ngStyle]="{top: 936*mapConfig.scale+ 'px', left: 1664*mapConfig.scale + 'px', position: 'absolute', width: 728*mapConfig.scale + 'px', height: 314 * mapConfig.scale + 'px', zIndex: 100, background:'black'}">
-            <video [width]="mapConfig.scale*728" [height]="314*mapConfig.scale" id="disco_video">
+            <video [width]="mapConfig.scale*728" [height]="314*mapConfig.scale" id="disco_video" autoplay>
                 <source src="https://anandtmptesting.s3.amazonaws.com/videoplayback.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>

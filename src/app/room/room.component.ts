@@ -84,7 +84,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         amplify_step_count: 1
     };
 
-    disco_points = [{x: 2028, y: 1093}];
+    disco_points = [{x: 2028 * this.mapConfig.scale, y: 1093 * this.mapConfig.scale}];
 
     my_attendee: Attendee;
     attendees = {};
@@ -515,12 +515,12 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                             y: attendee.last_state.location.y + this.characterConfig.character_height
                         },
                     };
-                    if (this.isInBox(position, char_box)) {
-                        is_proposed_position_valid = false;
-                        return;
-                    }
 
                     this.checkUserProximity(char_box.top_left, character_id);
+
+                    if (this.isInBox(position, char_box)) {
+                        is_proposed_position_valid = false;
+                    }
 
                 });
             });
@@ -552,11 +552,32 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         char_centroid.x = location.x + this.characterConfig.character_width / 2;
         char_centroid.y = location.y + this.characterConfig.character_height / 2;
 
-        console.log("this.pointDistance(position, char_centroid)", this.pointDistance(position, char_centroid), this.characterConfig.character_height, this.my_attendee);
+        // console.log("this.pointDistance(position, char_centroid)", this.pointDistance(position, char_centroid), this.characterConfig.character_height, this.my_attendee);
 
         const proximity_attendee_index = this.proximity_attendees.indexOf(character_id);
-        if (this.pointDistance(position, char_centroid) < this.characterConfig.character_height + this.my_attendee.proximity_radius) {
+        let prox_value = this.pointDistance(position, char_centroid);
+
+        console.log(prox_value, "prox_value");
+        this.my_attendee.proximity_radius = 100;
+
+        if (prox_value < this.characterConfig.character_height + this.my_attendee.proximity_radius) {
             console.log("added to proximity");
+
+            const audioElem = $("#remote-video-" + character_id + " audio").get(0);
+            let volume = 0;
+
+            // TODO revamp the logic
+            const max_val = this.my_attendee.proximity_radius * 4 + this.characterConfig.character_height;
+            const percentage_far = 1 - prox_value / max_val;
+
+            if (audioElem) {
+                if (percentage_far >= 0) {
+                    audioElem.volume = percentage_far;
+                }
+            }
+
+            console.log("VOLUME @#$@#$@#$@#$@#$ ", percentage_far, character_id)
+
 
             if (proximity_attendee_index === -1) {
                 this.proximity_attendees.push(character_id);
@@ -645,12 +666,25 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     resetDiscoVolume() {
-        let volume = 0.1
-        this.setVolume(volume)
+        let volume = 0.1;
+        let min_distance = 10000000;
+        this.disco_points.forEach((dp) => {
+            const disco_distance = this.pointDistance(this.my_attendee.last_state.location, dp);
+            if (disco_distance < min_distance) {
+                min_distance = disco_distance;
+            }
+            console.log(disco_distance, "disco_distance")
+        });
+
+        // TODO revamp the logic
+        const max_val = this.map_width / 2;
+        const percentage_far = 1 - min_distance / max_val;
+        this.setVolume(percentage_far);
     }
 
     setVolume(volume) {
         $('#disco_video').get(0).volume = volume;
+        console.log("disco volumne", volume);
     }
 
     update_character_position(attendee_id, new_state, animate = this.characterConfig.character_animation_time
