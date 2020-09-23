@@ -7,7 +7,6 @@ import {SocketService} from '../shared/services/socket.service';
 import {ActivatedRoute} from '@angular/router';
 import {ApiService} from '../shared/services/api.service';
 import {AuthService} from "../shared/services/auth.service";
-import {DomSanitizer} from "@angular/platform-browser";
 
 export interface Location {
     x: number;
@@ -106,12 +105,12 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                 private common: CommonService,
                 private auth: AuthService,
                 private route: ActivatedRoute,
-                public sanitiser: DomSanitizer,
                 private socketService: SocketService) {
 
         if (localStorage.getItem("cached_rooms")) {
             this.cached_rooms = JSON.parse(localStorage.getItem("cached_rooms"))
         }
+
 
         this.route.params.subscribe((params) => {
             const {roomId, roomTitle} = params;
@@ -131,6 +130,11 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
             // this.getRoomAttendees();
         });
 
+    }
+
+    window_load_handler(e) {
+        this.resize_handler(e);
+
         this.socketService.connectionEvent('disconnect').subscribe(() => {
             this.socketService.connect();
         })
@@ -147,7 +151,6 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.socketService.on('deleteAttendee', this.deleteAttendee.bind(this));
 
         this.socketService.on('characterChange', this.characterChange.bind(this));
-
     }
 
     ngOnInit() {
@@ -156,7 +159,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
         fromEvent(document.body, 'keydown').pipe(takeUntil(this.isComponentDestroying)).subscribe(this.keydown_handler.bind(this));
         fromEvent(window, 'resize').pipe(takeUntil(this.isComponentDestroying)).subscribe(this.resize_handler.bind(this));
-        fromEvent(window, 'load').pipe(takeUntil(this.isComponentDestroying)).subscribe(this.resize_handler.bind(this));
+        fromEvent(window, 'load').pipe(takeUntil(this.isComponentDestroying)).subscribe(this.window_load_handler.bind(this));
         fromEvent(window, 'scroll').pipe(debounceTime(250), takeUntil(this.isComponentDestroying)).subscribe(this.scroll_handler.bind(this));
 
         fromEvent(window, 'onmousewheel').pipe(debounceTime(250), takeUntil(this.isComponentDestroying)).subscribe(this.disable_event.bind(this));
@@ -210,8 +213,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
             this.apiService.post(this.apiService.apiUrl + '/roomLogin', payload).subscribe((response) => {
                 this.roomLoginDetails = response.data;
                 this.roomLoginDetails.attendee.last_state.face_towards = "right";
-                this.roomLoginDetails.attendee.last_state.location.x *= this.mapConfig.scale;
-                this.roomLoginDetails.attendee.last_state.location.y *= this.mapConfig.scale;
+                // this.roomLoginDetails.attendee.last_state.location.x *= this.mapConfig.scale;
+                // this.roomLoginDetails.attendee.last_state.location.y *= this.mapConfig.scale;
                 console.log(response.data);
                 this.cached_rooms.push({
                     "name": this.roomLoginDetails.room,
@@ -249,9 +252,17 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    giveAvailableLocationForSpawn() {
+        return {x: 1500, y: 400};
+    }
+
+
     addMe(attendee: Attendee) {
         this.my_attendee = attendee;
         this.my_attendee.last_state.is_walking = false;
+        if (this.my_attendee.last_state.location.x == null) {
+            this.my_attendee.last_state.location = this.giveAvailableLocationForSpawn();
+        }
         this.spawn_attendee(this.my_attendee, () => {
             setInterval(() => {
                 this.pushChangesToSocket()
@@ -523,7 +534,6 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     renderProximityVideos() {
-        console.log("touched a character .. rendinging video hang on !")
         this.common.twilio.connectToUsers(this.proximity_attendees);
     }
 
@@ -549,7 +559,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // console.log("need to scroll", diff_x, diff_y, final_scroll);
 
-            console.log("scrolling", scroll_left, this.my_attendee.last_state.location.x, this.window_width)
+            console.log("scrolling", scroll_left, this.my_attendee.last_state.location.x, this.window_width, final_scroll)
 
             $('html, body').dequeue().animate(final_scroll, 400);
         }

@@ -47,7 +47,10 @@ export class TwilioService {
         const elem = document.getElementById('remote-video-' + user_uid);
         if (track) {
             track.detach().forEach((element) => {
-                element.remove();
+                elem.setAttribute("class", "fade-out");
+                setTimeout(() => {
+                    element.remove();
+                }, 500)
             })
         }
 
@@ -93,7 +96,7 @@ export class TwilioService {
 
     unsubscribe(retainer_ids) {
         this.subscribed_participants.forEach((participant, i) => {
-            if (retainer_ids.indexOf(participant.identity) > -1) {
+            if (retainer_ids.indexOf(participant.identity) === -1) {
                 participant.tracks.forEach((publication) => {
                     this.unsubscribed(participant, publication.track);
                     this.subscribed_participants.splice(i, 1);
@@ -103,17 +106,22 @@ export class TwilioService {
         // this.subscribed_participants = [];
     }
 
+
     connectToUsers(participant_ids) {
         this.unsubscribe(participant_ids);
+        console.log("@#$@#$@#$@#$ length -----> ", this.subscribed_participants.length)
         // this.unsubscribed.bind(null, participant)
         if (this.roomObj && this.roomObj.participants) {
             console.log(this.roomObj.particpants);
             this.roomObj.participants.forEach((participant) => {
                 // console.log(participant.identity,"participant")
                 if (participant_ids.indexOf(participant.identity) > -1) {
-                    if (this.subscribed_participants.indexOf(participant.indentity) > -1) {
+                    const found = this.subscribed_participants.find((p) => p.identity === participant.identity);
+                    if (!found) {
                         this.subscribed_participants.push(participant);
                         this.participantConnected(participant);
+                    } else {
+                        console.log("already video found");
                     }
                 }
             });
