@@ -30,6 +30,7 @@ export class TwilioService {
         if (this.dynamic_users[user_uid] == undefined) {
             elem = document.createElement('div');
             elem.setAttribute('class', 'remote-video-item fade-in');
+            elem.setAttribute('data', Math.random());
             elem.setAttribute('id', 'remote-video-' + user_uid);
             this.dynamic_users[user_uid] = elem
         } else {
@@ -45,18 +46,21 @@ export class TwilioService {
     unsubscribed(participant, track) {
         let user_uid = participant.identity;
         const elem = document.getElementById('remote-video-' + user_uid);
+
         if (track) {
             track.detach().forEach((element) => {
-                elem.setAttribute("class", "fade-out");
-                setTimeout(() => {
-                    element.remove();
-                }, 500)
+                element.remove();
             })
         }
 
         if (elem && elem.children.length <= 1) {
-            elem.remove(); // check children count later
+            elem.setAttribute("class", "remote-video-item fade-out");
+            setTimeout(() => {
+                elem.setAttribute("class", "remote-video-item fade-in");
+                elem.remove();
+            }, 500);
         }
+
         console.log('Unsubscribed to RemoteTrack:', track.sid);
     }
 
