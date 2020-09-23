@@ -29,7 +29,7 @@ export class TwilioService {
         console.log(element, 'e', participant)
         if (this.dynamic_users[user_uid] == undefined) {
             elem = document.createElement('div');
-            elem.setAttribute('class', 'remote-video-item');
+            elem.setAttribute('class', 'remote-video-item fade-in');
             elem.setAttribute('id', 'remote-video-' + user_uid);
             this.dynamic_users[user_uid] = elem
         } else {
@@ -91,24 +91,30 @@ export class TwilioService {
         });
     }
 
-    unsubscribe() {
-        this.subscribed_participants.forEach((participant) => {
-            participant.tracks.forEach((publication) => {
-                this.unsubscribed(participant, publication.track);
-            });
+    unsubscribe(retainer_ids) {
+        this.subscribed_participants.forEach((participant, i) => {
+            if (retainer_ids.indexOf(participant.identity) > -1) {
+                participant.tracks.forEach((publication) => {
+                    this.unsubscribed(participant, publication.track);
+                    this.subscribed_participants.splice(i, 1);
+                });
+            }
         });
-        this.subscribed_participants = [];
+        // this.subscribed_participants = [];
     }
 
     connectToUsers(participant_ids) {
-        this.unsubscribe();
+        this.unsubscribe(participant_ids);
         // this.unsubscribed.bind(null, participant)
         if (this.roomObj && this.roomObj.participants) {
+            console.log(this.roomObj.particpants);
             this.roomObj.participants.forEach((participant) => {
                 // console.log(participant.identity,"participant")
                 if (participant_ids.indexOf(participant.identity) > -1) {
-                    this.subscribed_participants.push(participant);
-                    this.participantConnected(participant);
+                    if (this.subscribed_participants.indexOf(participant.indentity) > -1) {
+                        this.subscribed_participants.push(participant);
+                        this.participantConnected(participant);
+                    }
                 }
             });
         }
@@ -161,14 +167,15 @@ export class TwilioService {
             //     listenToSubscriptionEvents(publication,element)
             //   });
             // }
-
+            //
             this.roomObj.on('participantConnected', (participant) => {
-                if (this.roomObj.participants) {
-                    this.roomObj.participants.push(participant);
-                } else {
-                    this.roomObj.participants = [];
-                }
-                // this.participantConnected(participant)
+                // if (this.roomObj.participants) {
+                //     console.log(this.roomObj.participants,"participants")
+                //     this.roomObj.participants.push(participant);
+                // } else {
+                //     this.roomObj.participants = [];
+                // }
+                this.participantConnected(participant)
             });
 
         });

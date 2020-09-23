@@ -688,6 +688,7 @@
   },
   {
     "image": "Trees/Tree_11.png",
+    "zIndex": 11,
     "left": 568.1046,
     "top": 983.7461,
     "width": 174.0,
@@ -7799,6 +7800,7 @@
     "left": 50.0,
     "top": 0.0,
     "height": 668.5,
+    "width": 635,
     "restricted_polygon": [
       [
         2.5,
@@ -8042,7 +8044,7 @@
   },
   {
     "image": "Lighting/Dolphins.gif",
-    "zIndex": 1,
+    "zIndex": 10,
     "left": 450.5602,
     "top": 728.1499,
     "width": 471.5,

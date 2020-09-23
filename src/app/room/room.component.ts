@@ -7,6 +7,7 @@ import {SocketService} from '../shared/services/socket.service';
 import {ActivatedRoute} from '@angular/router';
 import {ApiService} from '../shared/services/api.service';
 import {AuthService} from "../shared/services/auth.service";
+import {DomSanitizer} from "@angular/platform-browser";
 
 export interface Location {
     x: number;
@@ -37,6 +38,9 @@ export interface RoomLoginDetails {
     twilio_token: string;
 }
 
+const ASSET_GIVEN_SCALE = 2;
+const RESIZE_SCALE = 0.65;
+
 @Component({
     selector: 'ts-room',
     templateUrl: './room.component.html',
@@ -60,23 +64,24 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
     cached_rooms = [];
 
-    characterConfig = {
-        character_animation_base: 'assets/images/map_assets/character/',
-        character_width: 60,
-        character_height: 98,
-        character_animation_time: 100,
-        step_count: 15,
-        amplify_step_count: 1
-    };
-
     mapConfig = {
-        asset_scale: 2,
+        scale: RESIZE_SCALE,
+        asset_scale: ASSET_GIVEN_SCALE * RESIZE_SCALE,
         my_map_scope_box: {
             top_left: {x: 0, y: 0},
             top_right: {x: 0, y: 0},
             bottom_left: {x: 0, y: 0},
             bottom_right: {x: 0, y: 0}
         },
+    };
+
+    characterConfig = {
+        character_animation_base: 'assets/images/map_assets/character/',
+        character_width: 60 * this.mapConfig.scale,
+        character_height: 111 * this.mapConfig.scale,
+        character_animation_time: 100,
+        step_count: 15,
+        amplify_step_count: 1
     };
 
     disco_points = [{x: 2028, y: 1093}];
@@ -87,8 +92,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     window_width = 0;
     window_height = 0;
 
-    map_width = 5600;
-    map_height = 5600;
+    map_width = 5600 * this.mapConfig.scale;
+    map_height = 5600 * this.mapConfig.scale;
 
     proximity_attendees = [];
 
@@ -101,6 +106,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                 private common: CommonService,
                 private auth: AuthService,
                 private route: ActivatedRoute,
+                public sanitiser: DomSanitizer,
                 private socketService: SocketService) {
 
         if (localStorage.getItem("cached_rooms")) {
@@ -193,6 +199,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.roomLoginDetails.room_access_token = room_access_token;
                 this.initiateSocketHandshake();
                 this.addMe(this.roomLoginDetails.attendee);
+
                 this.getRoomAttendees();
                 this.twilioConnect();
             }, (error) => {
@@ -202,6 +209,10 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
             // new login
             this.apiService.post(this.apiService.apiUrl + '/roomLogin', payload).subscribe((response) => {
                 this.roomLoginDetails = response.data;
+                this.roomLoginDetails.attendee.last_state.face_towards = "right";
+                this.roomLoginDetails.attendee.last_state.location.x *= this.mapConfig.scale;
+                this.roomLoginDetails.attendee.last_state.location.y *= this.mapConfig.scale;
+                console.log(response.data);
                 this.cached_rooms.push({
                     "name": this.roomLoginDetails.room,
                     "room_access_token": this.roomLoginDetails.room_access_token
@@ -211,6 +222,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.addMe(this.roomLoginDetails.attendee);
                 this.getRoomAttendees();
                 this.twilioConnect();
+
+
             }, (error) => {
                 this.common._alert.showAlert(error.error || error.err, 'error');
             });
@@ -240,7 +253,6 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.my_attendee = attendee;
         this.my_attendee.last_state.is_walking = false;
         this.spawn_attendee(this.my_attendee, () => {
-            this.resetMapScope(this.my_attendee.last_state.location);
             setInterval(() => {
                 this.pushChangesToSocket()
             }, 300);
@@ -310,12 +322,12 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
             for (let index = 0; index < data.length; index++) {
                 const element = data[index];
 
-                if (element.image.indexOf('Fire') > -1) {
-                    element.width = 50;
-                    element.height = 56.5;
-                    element.top -= 25;
-                    // element.left -= 10;
-                }
+                // if (element.image.indexOf('Fire') > -1) {
+                //     element.width = 50*this.mapConfig.scale;
+                //     element.height = 56.5*this.mapConfig.scale;
+                //     element.top -= 25*this.mapConfig.scale;
+                //     // element.left -= 10;
+                // }
 
                 element.width *= this.mapConfig.asset_scale;
                 element.height *= this.mapConfig.asset_scale;
@@ -446,6 +458,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
                 is_within_map_boundary = this.my_attendee.last_state.location.y + this.characterConfig.character_height + this.characterConfig.step_count < this.map_height;
 
+                console.log("down is_boundary", this.my_attendee.last_state.location.y, this.characterConfig.character_height, this.characterConfig.step_count, this.map_height)
                 current_face_towards = 'down';
 
                 break;
@@ -499,12 +512,13 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
                 this.update_character_position(this.my_attendee.tmp_user_id, new_state);
 
-
-                this.resetMapScope(this.my_attendee.last_state.location);
+                this.resetMapScope();
 
                 this.resetDiscoVolume();
 
             }
+        } else {
+            console.log("map ourside boundary")
         }
     }
 
@@ -513,11 +527,11 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.common.twilio.connectToUsers(this.proximity_attendees);
     }
 
-    resetMapScope(location) {
+    resetMapScope(force = false) {
 
         // console.log(this.isInBox(this.my_attendee.last_state.location, this.mapConfig.my_map_scope_box), "isinbox")
 
-        if (!this.isInBox(this.my_attendee.last_state.location, this.mapConfig.my_map_scope_box)) {
+        if (!this.isInBox(this.my_attendee.last_state.location, this.mapConfig.my_map_scope_box) || force) {
 
             const final_scroll = {};
 
@@ -534,6 +548,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
             final_scroll['scrollTop'] = (scroll_top + diff_y) + 'px';
 
             // console.log("need to scroll", diff_x, diff_y, final_scroll);
+
+            console.log("scrolling", scroll_left, this.my_attendee.last_state.location.x, this.window_width)
 
             $('html, body').dequeue().animate(final_scroll, 400);
         }
@@ -563,6 +579,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.window_height = e.currentTarget.innerHeight;
         this.window_width = e.currentTarget.innerWidth;
         this.reset_scope_box();
+        this.resetMapScope(true);
     }
 
     scroll_handler(e) {

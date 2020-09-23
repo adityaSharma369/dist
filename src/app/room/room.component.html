@@ -1,6 +1,6 @@
 <div class="main-wrapper">
     <div class="main-background">
-        <img src="assets/images/map_assets/background.png">
+        <img src="assets/images/map_assets/background.png" [width]="map_width" [height]="map_height">
     </div>
 
 
@@ -15,8 +15,8 @@
 
 
     <div class="stream-video-wrapper">
-        <div style="top: 936px; left: 1664px; position: absolute; width: 728px; height: 314px; z-index: 100; background: black">
-            <video width="728" height="314" id="disco_video" autoplay>
+        <div [ngStyle]="{top: 936*mapConfig.scale+ 'px', left: 1664*mapConfig.scale + 'px', position: 'absolute', width: 728*mapConfig.scale + 'px', height: 314 * mapConfig.scale + 'px', zIndex: 100, background:'black'}">
+            <video [width]="mapConfig.scale*728" [height]="314*mapConfig.scale" id="disco_video">
                 <source src="https://anandtmptesting.s3.amazonaws.com/videoplayback.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -44,11 +44,11 @@
             <img src="assets/images/map_assets/{{asset.image}}">
         </div>
 
-<!--        <div *ngFor="let area of polygon">-->
-<!--            <div *ngFor="let dot of area.restricted_polygon"-->
-<!--                 [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red'}">-->
-<!--            </div>-->
-<!--        </div>-->
+        <div *ngFor="let area of polygon">
+            <div *ngFor="let dot of area.restricted_polygon"
+                 [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red'}">
+            </div>
+        </div>
 
     </div>
 

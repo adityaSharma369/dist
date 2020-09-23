@@ -1,14 +1,21 @@
 .main-wrapper {
 
-  width: 5600px;
-  height: 5600px;
+  $map_width: 5600;
+  $map_height: 5600;
+
+  $scale_x: 0.65;
+  $scale_y: 0.65;
+
+
+  width: $map_width*$scale_x + px;
+  height: $map_height*$scale_y + px;
 
   .character-wrapper, .interactive-wrapper, .restricted-wrapper, .stream-video-wrapper {
     position: absolute;
     top: 0;
     left: 0;
-    width: 5600px;
-    height: 5600px;
+    width: $map_width*$scale_x +px;
+    height: $map_height*$scale_y +px;
     overflow: hidden;
 
     img {
@@ -19,7 +26,7 @@
 
   .character {
     // width: 40px;
-    width: 60px;
+    width: 60*$scale_x + px;
     position: absolute;
     z-index: 5;
   }
@@ -48,7 +55,8 @@
     background: white;
     border-radius: 10px;
     overflow: hidden;
-    video{
+
+    video {
       width: 150px;
     }
   }
@@ -66,14 +74,69 @@
     justify-content: center;
     align-items: center;
     display: flex;
-    video{
+
+    video {
       width: 200px;
     }
-    .remote-video-item{
+
+    .remote-video-item {
       display: inline-flex;
 
     }
   }
 
   // overflow: hidden;
+}
+
+.fade-in {
+  animation: fadeIn ease 20s;
+  -webkit-animation: fadeIn ease 20s;
+  -moz-animation: fadeIn ease 20s;
+  -o-animation: fadeIn ease 20s;
+  -ms-animation: fadeIn ease 20s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
