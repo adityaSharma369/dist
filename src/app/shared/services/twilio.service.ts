@@ -159,7 +159,11 @@ export class TwilioService {
             // }
 
             this.roomObj.on('participantConnected', (participant) => {
-                this.roomObj.participants.push(participant);
+                if (this.roomObj.participants) {
+                    this.roomObj.participants.push(participant);
+                } else {
+                    this.roomObj.participants = [];
+                }
                 // this.participantConnected(participant)
             });
 
