@@ -47,19 +47,31 @@ export class TwilioService {
         let user_uid = participant.identity;
         const elem = document.getElementById('remote-video-' + user_uid);
 
-        if (track) {
-            track.detach().forEach((element) => {
-                element.remove();
-            })
-        }
+        elem.setAttribute("class", "remote-video-item fade-out");
 
-        if (elem && elem.children.length <= 1) {
-            elem.setAttribute("class", "remote-video-item fade-out");
-            setTimeout(() => {
+        setTimeout(() => {
+            if (elem) {
                 elem.setAttribute("class", "remote-video-item fade-in");
                 elem.remove();
-            }, 500);
-        }
+            }
+
+            if (track) {
+                track.detach().forEach((element) => {
+                    element.remove();
+                })
+            }
+
+        }, 500);
+
+
+// todo RIGHT LOGIC
+        // if (elem && elem.children.length <= 1) {
+        //     elem.setAttribute("class", "remote-video-item fade-out");
+        //     setTimeout(() => {
+        //         elem.setAttribute("class", "remote-video-item fade-in");
+        //         elem.remove();
+        //     }, 500);
+        // }
 
         console.log('Unsubscribed to RemoteTrack:', track.sid);
     }

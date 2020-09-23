@@ -28,6 +28,7 @@ export interface Attendee {
     last_state: LastState;
     preferences: any[];
     streams?: any[];
+    proximity_radius: number;
 }
 
 export interface RoomLoginDetails {
@@ -260,6 +261,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     addMe(attendee: Attendee) {
         this.my_attendee = attendee;
         this.my_attendee.last_state.is_walking = false;
+        this.my_attendee.proximity_radius = 5;
         if (this.my_attendee.last_state.location.x == null) {
             this.my_attendee.last_state.location = this.giveAvailableLocationForSpawn();
         }
@@ -292,6 +294,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         if (attendee) {
             // attendee.last_state = data.last_state;
             this.update_character_position(data.tmp_user_id, data.last_state);
+            this.checkUserProximity(data.last_state.location, data.tmp_user_id);
+            this.renderProximityVideos();
         }
         console.log(data, "characterChange")
     }
@@ -326,6 +330,13 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         }
         return false;
+    }
+
+    pointDistance(loc1, loc2) {
+        var a = loc1.x - loc2.x;
+        var b = loc1.y - loc2.y;
+        var c = Math.sqrt(a * a + b * b);
+        return c;
     }
 
     render_assets() {
@@ -505,10 +516,12 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                         },
                     };
                     if (this.isInBox(position, char_box)) {
-                        this.proximity_attendees.push(attendee.tmp_user_id);
                         is_proposed_position_valid = false;
                         return;
                     }
+
+                    this.checkUserProximity(char_box.top_left, character_id);
+
                 });
             });
 
@@ -530,6 +543,28 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         } else {
             console.log("map ourside boundary")
+        }
+    }
+
+    checkUserProximity(location, character_id) {
+        const position = this.my_attendee.last_state.location;
+        let char_centroid: any = {};
+        char_centroid.x = location.x + this.characterConfig.character_width / 2;
+        char_centroid.y = location.y + this.characterConfig.character_height / 2;
+
+        console.log("this.pointDistance(position, char_centroid)", this.pointDistance(position, char_centroid), this.characterConfig.character_height, this.my_attendee);
+
+        const proximity_attendee_index = this.proximity_attendees.indexOf(character_id);
+        if (this.pointDistance(position, char_centroid) < this.characterConfig.character_height + this.my_attendee.proximity_radius) {
+            console.log("added to proximity");
+
+            if (proximity_attendee_index === -1) {
+                this.proximity_attendees.push(character_id);
+            }
+        } else {
+            if (proximity_attendee_index > -1) {
+                this.proximity_attendees.splice(proximity_attendee_index, 1);
+            }
         }
     }
 
