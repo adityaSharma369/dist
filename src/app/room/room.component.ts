@@ -14,6 +14,7 @@ export interface Location {
 
 export interface LastState {
   location: Location;
+  is_walking: boolean;
   user_character: string;
   face_towards: string;
 }
@@ -41,8 +42,8 @@ export interface RoomLoginDetails {
   styleUrls: ['./room.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
+export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   roomId: string;
   roomTitle: string;
@@ -58,8 +59,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     character_width: 60,
     character_height: 98,
     character_animation_time: 100,
-    step_count: 20,
-    amplify_step_count: 2
+    step_count: 15,
+    amplify_step_count: 1
   };
 
   mapConfig = {
@@ -112,6 +113,9 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.socketService.on('newAttendee', (data: Attendee) => {
       this.addNewAttendee(data);
     });
+
+    this.socketService.on('characterChange', this.characterChange.bind(this));
+
   }
 
   ngOnInit() {
@@ -123,6 +127,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     fromEvent(window, 'load').pipe(takeUntil(this.isComponentDestroying)).subscribe(this.resize_handler.bind(this));
     fromEvent(window, 'scroll').pipe(debounceTime(250), takeUntil(this.isComponentDestroying)).subscribe(this.scroll_handler.bind(this));
 
+    fromEvent(window, 'onmousewheel').pipe(debounceTime(250), takeUntil(this.isComponentDestroying)).subscribe(this.disable_event.bind(this));
     // $(document).on('keydown', this.keydown_handler);
     // this.twilioToken();
 
@@ -158,16 +163,26 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addMe(attendee: Attendee) {
     this.my_attendee = attendee;
+    this.my_attendee.last_state.is_walking = false;
     this.spawn_attendee(this.my_attendee, () => {
       this.resetMapScope(this.my_attendee.last_state.location);
     });
   }
 
   addNewAttendee(attendee: Attendee) {
+    attendee.last_state.is_walking = false;
     this.attendees[attendee.tmp_user_id] = attendee;
     this.spawn_attendee(attendee, null);
   }
 
+  characterChange(data) {
+    let attendee = this.attendees[data.tmp_user_id];
+    if (attendee) {
+      // attendee.last_state = data.last_state;
+      this.update_character_position(data.tmp_user_id, data.last_state);
+    }
+    console.log(data, "characterChange")
+  }
 
   isInBox(p, box_edges) {
     return box_edges.top_left.x <= p.x && p.x <= box_edges.bottom_right.x && box_edges.top_left.y <= p.y && p.y <= box_edges.bottom_right.y;
@@ -240,10 +255,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  timer = {
-    "attendee_id": 0,
-  }
-
+  walking_state_timeout = {}
 
   keydown_handler(e) {
 
@@ -350,20 +362,11 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
         break;
 
-      case 77:
-        const tmp_location = this.attendees['character1'].location;
-        tmp_location.x += 50;
-        this.update_character_position('character1', tmp_location, 100);
-        break;
       default:
         return; // exit this handler for other keys
     }
 
-    if (current_face_towards !== this.my_attendee.last_state.face_towards) {
-      $('#' + this.my_attendee.tmp_user_id + ' img').attr('src', this.characterConfig.character_animation_base + this.my_attendee.last_state.user_character + '/' + current_face_towards + '.gif');
-    }
-
-    this.my_attendee.last_state.face_towards = current_face_towards;
+    // this.my_attendee.last_state.face_towards = current_face_towards;
 
     if (is_within_map_boundary) {
 
@@ -395,22 +398,17 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
       if (is_proposed_position_valid) {
-        $('#' + this.my_attendee.tmp_user_id).dequeue().animate({
-          left: proposed_position.x + 'px',
-          top: proposed_position.y + 'px'
-        }, this.characterConfig.character_animation_time);
 
-        this.my_attendee.last_state.location = proposed_position;
+        let new_state = this.my_attendee.last_state;
+        new_state.location = proposed_position;
+        new_state.face_towards = current_face_towards;
+
+        this.update_character_position(this.my_attendee.tmp_user_id, new_state);
+        this.socketService.send("characterChange", {
+          tmp_user_id: this.my_attendee.tmp_user_id,
+          last_state: this.my_attendee.last_state
+        });
         this.resetMapScope(this.my_attendee.last_state.location);
-
-        // used to transition from walking animation to static image
-        if (this.timer[this.my_attendee.tmp_user_id]) {
-          clearTimeout(this.timer[this.my_attendee.tmp_user_id])
-        }
-        this.timer[this.my_attendee.tmp_user_id] = setTimeout(() => {
-          $('#' + this.my_attendee.tmp_user_id + ' img').attr('src', this.characterConfig.character_animation_base + this.my_attendee.last_state.user_character + '/' + this.my_attendee.last_state.face_towards + '_static.gif');
-        }, 1000);
-
       }
     }
   }
@@ -472,6 +470,9 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.reset_scope_box();
   }
 
+  disable_event(e) {
+    e.preventDefault();
+  }
 
   spawn_attendee(attendee: Attendee, cb) {
     const jquery_character_wrapper = $('.character-wrapper');
@@ -482,13 +483,44 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  update_character_position(char_id, location, animate = this.characterConfig.character_animation_time
+  update_character_position(attendee_id, new_state, animate = this.characterConfig.character_animation_time
   ) {
-    this.attendees[char_id].location = location;
-    $('.character#' + char_id).dequeue().animate({
-      left: location.x + 'px',
-      top: location.y + 'px'
+
+    let attendee = this.attendees[attendee_id] || this.my_attendee;
+
+    console.log(attendee.last_state, new_state,"compariossdfsdf$@#$#@");
+
+    if (attendee.last_state.face_towards != new_state.face_towards || attendee.last_state.is_walking == false) {
+      $('#' + attendee.tmp_user_id + ' img').attr('src', this.characterConfig.character_animation_base + new_state.user_character + '/' + new_state.face_towards + '.gif');
+    }
+
+    if (this.my_attendee.tmp_user_id == attendee_id) {
+      this.my_attendee.last_state.location = new_state.location
+      this.my_attendee.last_state.is_walking = true
+    } else {
+      this.attendees[attendee_id].last_state.location = new_state.location;
+      this.attendees[attendee_id].last_state.is_walking = true
+    }
+
+    $('.character#' + attendee_id).dequeue().animate({
+      left: new_state.location.x + 'px',
+      top: new_state.location.y + 'px'
     }, animate);
+
+    // used to transition from walking animation to static image
+    if (this.walking_state_timeout[attendee_id]) {
+      clearTimeout(this.walking_state_timeout[attendee_id])
+    }
+
+    this.walking_state_timeout[attendee_id] = setTimeout(() => {
+      $('#' + attendee_id + ' img').attr('src', this.characterConfig.character_animation_base + new_state.user_character + '/' + new_state.face_towards + '_static.gif');
+      if (this.my_attendee.tmp_user_id == attendee_id) {
+        this.my_attendee.last_state.is_walking = false;
+      } else {
+        this.attendees[attendee_id].last_state.is_walking = false;
+      }
+    }, this.characterConfig.character_animation_time);
+
   }
 
   twilioToken() {
