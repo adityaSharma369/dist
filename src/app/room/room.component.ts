@@ -683,8 +683,10 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     setVolume(volume) {
-        $('#disco_video').get(0).volume = volume;
-        console.log("disco volumne", volume);
+        if (volume > 0) {
+            $('#disco_video').get(0).volume = volume;
+            console.log("disco volumne", volume);
+        }
     }
 
     update_character_position(attendee_id, new_state, animate = this.characterConfig.character_animation_time
