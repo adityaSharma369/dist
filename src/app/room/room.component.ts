@@ -116,16 +116,22 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
             this.getRoomLoginDetails();
             // this.getRoomAttendees();
-
         });
 
-        this.socketService.on('newAttendee', (data: Attendee) => {
-            this.addNewAttendee(data);
-        });
+        this.socketService.connectionEvent('disconnect').subscribe(() => {
+            this.socketService.connect();
+        })
 
-         this.socketService.on('deleteAttendee', (data: Attendee) => {
-            this.addNewAttendee(data);
-        });
+        this.socketService.connectionEvent('connect').subscribe(() => {
+            if (this.roomLoginDetails) {
+                this.initiateSocketHandshake();
+                this.getRoomAttendees();
+            }
+        })
+
+        this.socketService.on('newAttendee', this.addNewAttendee.bind(this));
+
+        this.socketService.on('deleteAttendee', this.deleteAttendee.bind(this));
 
         this.socketService.on('characterChange', this.characterChange.bind(this));
 
@@ -204,8 +210,10 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     initiateSocketHandshake() {
-        const payload = {...this.roomLoginDetails.attendee};
-        this.socketService.send('handshake', payload);
+        if (this.roomLoginDetails) {
+            const payload = {...this.roomLoginDetails.attendee};
+            this.socketService.send('handshake', payload);
+        }
     }
 
     addMe(attendee: Attendee) {
@@ -224,6 +232,13 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         this.attendees[attendee.tmp_user_id] = attendee;
+    }
+
+    deleteAttendee(data) {
+        delete this.attendees[data.tmp_user_id];
+        const jquery_character_wrapper = $('.character-wrapper #' + data.tmp_user_id);
+        // tslint:disable-next-line:max-line-length
+        jquery_character_wrapper.remove();
     }
 
     characterChange(data) {
@@ -462,7 +477,6 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         }
     }
-
 
     resetMapScope(location) {
 
