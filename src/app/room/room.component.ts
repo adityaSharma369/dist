@@ -51,6 +51,9 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     roomLoginDetails: RoomLoginDetails;
     isComponentDestroying: Subject<any> = new Subject<any>();
 
+    last_pushed_socket_state: any = {}
+
+
     polygon: any[] = [];
     assetCoords: any[] = [];
     access_token: any;
@@ -75,6 +78,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
             bottom_right: {x: 0, y: 0}
         },
     };
+
+    disco_points = [{x: 2028, y: 1093}];
 
     my_attendee: Attendee;
     attendees = {};
@@ -152,6 +157,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
     }
 
+
     ngAfterViewInit() {
         this.common.twilio.localVideo = this.localVideo;
         this.common.twilio.r.push(this.remoteVideos);
@@ -216,11 +222,25 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    pushChangesToSocket() {
+        if (!this.last_pushed_socket_state.location || (this.last_pushed_socket_state.location.x != this.my_attendee.last_state.location.x || this.last_pushed_socket_state.location.y != this.my_attendee.last_state.location.y)) {
+            this.socketService.send("characterChange", {
+                tmp_user_id: this.my_attendee.tmp_user_id,
+                last_state: this.my_attendee.last_state
+            });
+
+            this.last_pushed_socket_state = {...this.my_attendee.last_state};
+        }
+    }
+
     addMe(attendee: Attendee) {
         this.my_attendee = attendee;
         this.my_attendee.last_state.is_walking = false;
         this.spawn_attendee(this.my_attendee, () => {
             this.resetMapScope(this.my_attendee.last_state.location);
+            setInterval(() => {
+                this.pushChangesToSocket()
+            }, 300);
         });
     }
 
@@ -283,7 +303,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     render_assets() {
-        this.apiService.get('assets/location8.json').subscribe((data: any) => {
+        this.apiService.get('assets/location9.json').subscribe((data: any) => {
             for (let index = 0; index < data.length; index++) {
                 const element = data[index];
 
@@ -469,11 +489,12 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                 new_state.face_towards = current_face_towards;
 
                 this.update_character_position(this.my_attendee.tmp_user_id, new_state);
-                this.socketService.send("characterChange", {
-                    tmp_user_id: this.my_attendee.tmp_user_id,
-                    last_state: this.my_attendee.last_state
-                });
+
+
                 this.resetMapScope(this.my_attendee.last_state.location);
+
+                this.resetDiscoVolume();
+
             }
         }
     }
@@ -500,7 +521,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // console.log("need to scroll", diff_x, diff_y, final_scroll);
 
-            $('html, body').dequeue().animate(final_scroll, this.characterConfig.character_animation_time);
+            $('html, body').dequeue().animate(final_scroll, 400);
         }
 
     }
@@ -513,8 +534,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         const center_y = scroll_top + (this.window_height / 2);
         const center_x = scroll_left + (this.window_width / 2);
 
-        const box_width = 0 * this.window_width;
-        const box_height = 0 * this.window_height;
+        const box_width = 0.2 * this.window_width;
+        const box_height = 0.2 * this.window_height;
 
         this.mapConfig.my_map_scope_box = {
             top_left: {x: center_x - box_width, y: center_y - box_height},
@@ -545,6 +566,16 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         if (cb) {
             cb();
         }
+    }
+
+    resetDiscoVolume() {
+        let volume = 0.1
+        this.setVolume(volume)
+    }
+
+    setVolume(volume) {
+        $('#disco_video').get(0).volume = volume;
+
     }
 
     update_character_position(attendee_id, new_state, animate = this.characterConfig.character_animation_time

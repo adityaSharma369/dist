@@ -1,51 +1,56 @@
 <div class="main-wrapper">
-  <div class="main-background">
-    <img src="assets/images/map_assets/background.png">
-  </div>
-
-
-  <div class="character-wrapper">
-  </div>
-
-  <!-- <div class="interactive-wrapper">
-    <div class="stage">
-      <img src="assets/images/map_assets/stage1.png">
-    </div>
-  </div> -->
-
-  <div class="stream-video-wrapper">
-    <div style="top: 936px; left: 1664px; position: absolute; width: 728px; height: 314px; z-index: 100;">
-      <iframe width="728" height="314" src="https://www.youtube.com/embed/-B6_H6-kNEU?autoplay=0&controls=0"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen></iframe>
+    <div class="main-background">
+        <img src="assets/images/map_assets/background.png">
     </div>
 
-    <div class="local_video" #localVideo>
 
+    <div class="character-wrapper">
     </div>
 
-    <div class="remote_videos" #remoteVideos>
-
-    </div>
-
-  </div>
-
-
-  <div class="restricted-wrapper">
-
-    <div *ngFor="let asset of assetCoords"
-         [ngStyle]="{'z-index':(asset.zIndex||2),'top':asset.top+'px','left':asset.left+'px','position':'absolute','width':asset.width+'px','height':asset.height+'px'}" >
-      <img src="assets/images/map_assets/{{asset.image}}">
-    </div>
-
-    <div *ngFor="let area of polygon">
-      <div *ngFor="let dot of area.restricted_polygon"
-           [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red'}">
+    <!-- <div class="interactive-wrapper">
+      <div class="stage">
+        <img src="assets/images/map_assets/stage1.png">
       </div>
+    </div> -->
+
+
+    <div class="stream-video-wrapper">
+        <div style="top: 936px; left: 1664px; position: absolute; width: 728px; height: 314px; z-index: 100; background: black">
+            <video width="728" height="314" id="disco_video" controls>
+                <source src="https://anandtmptesting.s3.amazonaws.com/videoplayback.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <!--            <iframe width="728" height="314" src="https://www.youtube.com/embed/-B6_H6-kNEU?autoplay=0&controls=0"-->
+            <!--                    frameborder="0"-->
+            <!--                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"-->
+            <!--                    allowfullscreen></iframe>-->
+        </div>
+
+        <div class="local_video" #localVideo>
+
+        </div>
+
+        <div class="remote_videos" #remoteVideos>
+
+        </div>
+
     </div>
 
-  </div>
+
+    <div class="restricted-wrapper">
+
+        <div *ngFor="let asset of assetCoords"
+             [ngStyle]="{'z-index':(asset.zIndex||2),'top':asset.top+'px','left':asset.left+'px','position':'absolute','width':asset.width+'px','height':asset.height+'px'}">
+            <img src="assets/images/map_assets/{{asset.image}}">
+        </div>
+
+        <div *ngFor="let area of polygon">
+            <div *ngFor="let dot of area.restricted_polygon"
+                 [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red'}">
+            </div>
+        </div>
+
+    </div>
 
 </div>
 
