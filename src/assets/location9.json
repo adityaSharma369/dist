@@ -1622,12 +1622,10 @@
     ]
   },
   {
-    "image": "StagingElements/Speaker_1.gif",
+    "image": "StagingElements/Speaker_2.gif",
     "zIndex": 3,
-    "left": 1026.2799,
-    "top": 965.3647,
-    "width": 104.5,
-    "height": 141.0,
+    "left": 1050.2799,
+    "top": 1030.3647,
     "restricted_polygon": [
       [
         1104.61,
@@ -1704,11 +1702,10 @@
     ]
   },
   {
-    "image": "StagingElements/Speaker_2.gif",
-    "left": 1157.0851,
-    "top": 846.234,
-    "width": 34.5,
-    "height": 53.5,
+    "image": "StagingElements/Speaker_1.gif",
+    "zIndex": 3,
+    "left": 1207.0851,
+    "top": 800.234,
     "restricted_polygon": [
       [
         1167.085,
@@ -1738,6 +1735,7 @@
   },
   {
     "image": "StagingElements/Speaker_3.gif",
+    "zIndex": 3,
     "left": 1298.1915,
     "top": 750.4468,
     "width": 47.5,
@@ -1775,6 +1773,7 @@
   },
   {
     "image": "StagingElements/Speaker_4.gif",
+    "zIndex": 3,
     "left": 1457.6809,
     "top": 750.7872,
     "width": 44.5,
@@ -1812,6 +1811,7 @@
   },
   {
     "image": "StagingElements/Speaker_5.png",
+    "zIndex": 3,
     "left": 1612.6596,
     "top": 846.4468,
     "width": 31.0,
@@ -7948,6 +7948,7 @@
   },
   {
     "image": "Stage/Stage.png",
+    "zIndex": 1,
     "left": 880.0,
     "top": 608.0,
     "width": 1143.0,
@@ -8041,8 +8042,9 @@
   },
   {
     "image": "Lighting/Dolphins.gif",
-    "left": 446.5602,
-    "top": 928.1499,
+    "zIndex": 1,
+    "left": 450.5602,
+    "top": 728.1499,
     "width": 471.5,
     "height": 395.5,
     "restricted_polygon": []

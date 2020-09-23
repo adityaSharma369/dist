@@ -90,6 +90,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     map_width = 5600;
     map_height = 5600;
 
+    proximity_attendees = [];
+
     @ViewChild('localVideo', {static: true}) localVideo: ElementRef;
     @ViewChild('remoteVideos', {static: true}) remoteVideos: ElementRef;
 
@@ -154,7 +156,6 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         fromEvent(window, 'onmousewheel').pipe(debounceTime(250), takeUntil(this.isComponentDestroying)).subscribe(this.disable_event.bind(this));
         // $(document).on('keydown', this.keydown_handler);
         // this.twilioToken();
-
     }
 
 
@@ -193,6 +194,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.initiateSocketHandshake();
                 this.addMe(this.roomLoginDetails.attendee);
                 this.getRoomAttendees();
+                this.twilioConnect();
             }, (error) => {
                 this.common._alert.showAlert(error.error || error.err, 'error');
             });
@@ -208,6 +210,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.initiateSocketHandshake();
                 this.addMe(this.roomLoginDetails.attendee);
                 this.getRoomAttendees();
+                this.twilioConnect();
             }, (error) => {
                 this.common._alert.showAlert(error.error || error.err, 'error');
             });
@@ -456,6 +459,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         if (is_within_map_boundary) {
 
             let is_proposed_position_valid = true;
+            this.proximity_attendees = [];
 
             possible_conflicts.forEach((position) => {
                 if (!is_proposed_position_valid) {
@@ -466,6 +470,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                     is_proposed_position_valid = false;
                     return;
                 }
+
                 Object.keys(this.attendees).forEach((character_id) => {
                     const attendee = this.attendees[character_id];
                     const char_box = {
@@ -476,11 +481,15 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                         },
                     };
                     if (this.isInBox(position, char_box)) {
+                        this.proximity_attendees.push(attendee);
                         is_proposed_position_valid = false;
                         return;
                     }
                 });
             });
+
+            this.renderProximityVideos();
+
 
             if (is_proposed_position_valid) {
 
@@ -497,6 +506,12 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
             }
         }
+    }
+
+    renderProximityVideos() {
+        this.proximity_attendees.forEach((attendee) => {
+
+        });
     }
 
     resetMapScope(location) {
@@ -616,43 +631,54 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
     }
 
-    twilioToken() {
-        console.log('hello');
-        const storage = JSON.parse(localStorage.getItem('token') || '{}');
-        const date = Date.now();
-        console.log('at down');
-        // if (storage['token'] && storage['created_at'] + 3600000 > date) {
-        //   console.log('in token')
-        //   this.access_token = storage['token'];
-        //   this.common.twilio.connectToRoom(this.access_token,
-        //     { name: 'test',
-        //       audio: true,
-        //       video: { width: 240 }
-        //     })
-        //   return;
-        // }
-
-        this.common._api.get(this.common._api.apiUrl + '/generateToken').subscribe((resp: any) => {
-                console.log(resp, 'in the api part');
-                this.access_token = resp.data['token'];
-                console.log(this.access_token, 'access_token');
-                // this.username = d['username'];
-                localStorage.setItem('token', JSON.stringify({
-                    token: this.access_token,
-                    // username:this.username,
-                    created_at: date
-                }));
-
-                this.common.twilio.connectToRoom(this.access_token,
-                    {
-                        name: 'test',
-                        audio: true,
-                        video: {width: 320}
-                    });
-            },
-            error => console.log(JSON.stringify(error)));
-
+    twilioConnect() {
+        console.log("twilio connect", this.roomLoginDetails)
+        this.common.twilio.connectToRoom(this.roomLoginDetails.twilio_token,
+            {
+                name: this.roomId,
+                audio: true,
+                video: {width: 320}
+            });
     }
+
+    //
+    // twilioToken() {
+    //     console.log('hello');
+    //     const storage = JSON.parse(localStorage.getItem('token') || '{}');
+    //     const date = Date.now();
+    //     console.log('at down');
+    //     // if (storage['token'] && storage['created_at'] + 3600000 > date) {
+    //     //   console.log('in token')
+    //     //   this.access_token = storage['token'];
+    //     //   this.common.twilio.connectToRoom(this.access_token,
+    //     //     { name: 'test',
+    //     //       audio: true,
+    //     //       video: { width: 240 }
+    //     //     })
+    //     //   return;
+    //     // }
+    //
+    //     this.common._api.get(this.common._api.apiUrl + '/generateToken').subscribe((resp: any) => {
+    //             console.log(resp, 'in the api part');
+    //             this.access_token = resp.data['token'];
+    //             console.log(this.access_token, 'access_token');
+    //             // this.username = d['username'];
+    //             localStorage.setItem('token', JSON.stringify({
+    //                 token: this.access_token,
+    //                 // username:this.username,
+    //                 created_at: date
+    //             }));
+    //
+    //             this.common.twilio.connectToRoom(this.access_token,
+    //                 {
+    //                     name: 'test',
+    //                     audio: true,
+    //                     video: {width: 320}
+    //                 });
+    //         },
+    //         error => console.log(JSON.stringify(error)));
+    //
+    // }
 
 
 }
