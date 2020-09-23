@@ -22,8 +22,10 @@ export interface Attendee {
   room_id: string;
   is_host: boolean;
   tmp_user_id: string;
+  name?: string;
   last_state: LastState;
   preferences: any[];
+  streams?: any[];
 }
 
 export interface RoomLoginDetails {
@@ -57,7 +59,22 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   asset_scale = 2;
   character_animation_base = 'assets/images/map_assets/character/';
 
-  my_state;
+  characterConfig = {
+    character_width: 60,
+    character_height: 98
+  };
+
+  mapConfig = {
+    my_map_scope_box: {
+      top_left: {x: 0, y: 0},
+      top_right: {x: 0, y: 0},
+      bottom_left: {x: 0, y: 0},
+      bottom_right: {x: 0, y: 0}
+    },
+    step_count: 20
+  };
+
+  my_state; 
   characters = {};
 
   window_width = 0;
@@ -143,42 +160,16 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addMe(attendee: Attendee) {
-    this.my_state = {
-      id: attendee.tmp_user_id,
-      character_width: 60,
-      character_height: 98,
-      location: attendee.last_state.location,
-      character: attendee.last_state.user_character,
-      face_towards: attendee.last_state.face_towards,
-      my_map_scope_box: {
-        top_left: {x: 0, y: 0},
-        top_right: {x: 0, y: 0},
-        bottom_left: {x: 0, y: 0},
-        bottom_right: {x: 0, y: 0}
-      },
-      step_count: 20
-    };
-
+    this.my_state = {...attendee};
     this.spawn_character(this.my_state, () => {
       this.resetMapScope(this.my_state.location);
     });
   }
 
   addNewAttendee(attendee: Attendee) {
-    const character = {
-      id: attendee.tmp_user_id,
-      character_width: 60,
-      character_height: 98,
-      location: attendee.last_state.location,
-      character: attendee.last_state.user_character,
-      face_towards: attendee.last_state.face_towards,
-      step_count: 30
-    };
-
-    this.characters[character.id] = character;
+    const character = {...attendee};
+    this.characters[character.tmp_user_id] = character;
     this.spawn_character(character, null);
-
-    console.log(this.characters);
   }
 
 
