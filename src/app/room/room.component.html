@@ -16,7 +16,7 @@
 
     <div class="stream-video-wrapper">
         <div style="top: 936px; left: 1664px; position: absolute; width: 728px; height: 314px; z-index: 100; background: black">
-            <video width="728" height="314" id="disco_video" controls>
+            <video width="728" height="314" id="disco_video" autoplay>
                 <source src="https://anandtmptesting.s3.amazonaws.com/videoplayback.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -44,11 +44,11 @@
             <img src="assets/images/map_assets/{{asset.image}}">
         </div>
 
-        <div *ngFor="let area of polygon">
-            <div *ngFor="let dot of area.restricted_polygon"
-                 [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red'}">
-            </div>
-        </div>
+<!--        <div *ngFor="let area of polygon">-->
+<!--            <div *ngFor="let dot of area.restricted_polygon"-->
+<!--                 [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red'}">-->
+<!--            </div>-->
+<!--        </div>-->
 
     </div>
 
