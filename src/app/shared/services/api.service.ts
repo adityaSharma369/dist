@@ -171,7 +171,8 @@ export class ApiService {
     }
     if (err.status === 401) { // unauthorized
       this._auth.logout();
-      this._router.navigateByUrl('/login', {queryParams: {returnUrl: this._router.url}});
+      localStorage.clear()
+      this._router.navigateByUrl('room/5f6a08172d5b0a00131fafd5/zappy_test', {queryParams: {returnUrl: this._router.url}});
     }
   }
 }
