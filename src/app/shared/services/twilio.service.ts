@@ -35,8 +35,9 @@ export class TwilioService {
         } else {
             elem = this.dynamic_users[user_uid];
         }
-
-        elem.append(track.attach());
+        if (track) {
+            elem.append(track.attach());
+        }
         element.nativeElement.appendChild(elem);
         // console.log('Subscribed to RemoteTrack:', track.sid);
     }
@@ -44,9 +45,12 @@ export class TwilioService {
     unsubscribed(participant, track) {
         let user_uid = participant.identity;
         const elem = document.getElementById('remote-video-' + user_uid);
-        track.detach().forEach((element) => {
-            element.remove();
-        })
+        if (track) {
+            track.detach().forEach((element) => {
+                element.remove();
+            })
+        }
+
         if (elem && elem.children.length <= 1) {
             elem.remove(); // check children count later
         }
