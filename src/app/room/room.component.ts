@@ -481,7 +481,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
                         },
                     };
                     if (this.isInBox(position, char_box)) {
-                        this.proximity_attendees.push(attendee);
+                        this.proximity_attendees.push(attendee.tmp_user_id);
                         is_proposed_position_valid = false;
                         return;
                     }
@@ -509,9 +509,8 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     renderProximityVideos() {
-        this.proximity_attendees.forEach((attendee) => {
-
-        });
+        console.log("touched a character .. rendinging video hang on !")
+        this.common.twilio.connectToUsers(this.proximity_attendees);
     }
 
     resetMapScope(location) {
@@ -590,7 +589,6 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
 
     setVolume(volume) {
         $('#disco_video').get(0).volume = volume;
-
     }
 
     update_character_position(attendee_id, new_state, animate = this.characterConfig.character_animation_time
