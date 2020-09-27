@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {RoomComponent} from './room/room.component';
+import {DashboardComponent} from './dashboard/dashboard.component';
 
 const routes: Routes = [
   // {
@@ -16,8 +17,9 @@ const routes: Routes = [
   //     {path: '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)},
   //   ]
   // },
+  {path: 'dashboard', component: DashboardComponent},
   {path: 'room/:roomId/:roomTitle', component: RoomComponent},
-  {path: '', redirectTo: '/room', pathMatch: 'full'},
+  {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
   {path: 'not-found', component: NotFoundComponent},
   {path: '**', redirectTo: '/not-found'}
 ];

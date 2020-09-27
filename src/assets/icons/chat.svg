@@ -1,0 +1,9 @@
+<svg id="kakao-talk" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36.742" height="39.256" viewBox="0 0 36.742 39.256">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#c640d1"/>
+      <stop offset="1" stop-color="#d86d3b"/>
+    </linearGradient>
+  </defs>
+  <path id="Path_586" data-name="Path 586" d="M18.371,1C28.516,1,36.742,8.509,36.742,17.772a16.484,16.484,0,0,1-8.611,14.209c2.569,10.259,4.078,10.926-6.5,2.3a20.224,20.224,0,0,1-3.262.264C8.226,34.541,0,27.033,0,17.77S8.226,1,18.371,1Z" transform="translate(0 -1)" fill="url(#linear-gradient)"/>
+</svg>

@@ -16,7 +16,7 @@
 
     <div class="stream-video-wrapper">
         <div [ngStyle]="{top: 936*mapConfig.scale+ 'px', left: 1664*mapConfig.scale + 'px', position: 'absolute', width: 728*mapConfig.scale + 'px', height: 314 * mapConfig.scale + 'px', zIndex: 100, background:'black'}">
-            <video [width]="mapConfig.scale*728" [height]="314*mapConfig.scale" id="disco_video" autoplay>
+          <video [width]="mapConfig.scale*728" [height]="314*mapConfig.scale" id="disco_video">
                 <source src="https://anandtmptesting.s3.amazonaws.com/videoplayback.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -51,6 +51,35 @@
 <!--        </div>-->
 
     </div>
+
+  <ng-container *ngIf="isRoomSettingsOpen">
+    <div class="settings-wrapper">
+      <div class="settings-menu-list">
+        <ng-container *ngFor="let item of roomSettingsMenuList">
+          <div class="setting-item" (click)="updateSetting(item.key)" @fadeInAndOut>
+            <div class="setting-item-icon-holder">
+              <img [src]="'assets/icons/settings-menu/'+ item.icon + '.svg'" [alt]="item.key">
+            </div>
+            <div class="tooltip tooltip-left">
+              {{item.toolTipText}}
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="settings-button" (click)="isRoomSettingsOpen = !isRoomSettingsOpen">
+    <div class="settings-icon-holder" [class.map-action-button-clicked]="isRoomSettingsOpen">
+      <img src="assets/icons/settings.svg" alt="settings icon">
+    </div>
+  </div>
+
+  <div class="chat-button">
+    <div class="chat-icon-holder">
+      <img src="assets/icons/chat.svg" alt="chat icon">
+    </div>
+  </div>
 
 </div>
 

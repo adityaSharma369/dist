@@ -11,7 +11,7 @@ import {ServerService} from './shared/services/server.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Angular 8 Starter';
+  title = 'Zappy.live';
   @ViewChild('loadingElement', {static: true}) loadingElement: ElementRef;
 
   constructor(private _network: NetworkStatusAngularService,
