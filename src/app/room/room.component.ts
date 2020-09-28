@@ -368,31 +368,55 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isPointInPolygon(left, top) {
-
     const x = left;
     const y = top;
 
     for (let index = 0; index < this.polygon.length; index++) {
-      const element = this.polygon[index].restricted_polygon;
-      let inside = false;
-      for (let i = 0, j = element.length - 1; i < element.length; j = i++) {
-        const xi = (element[i][0]);
-        const yi = (element[i][1]);
-        const xj = (element[j][0]);
-        const yj = (element[j][1]);
+        const element = this.polygon[index]
+        let inside = false;
+        for (let i = 0, j = element.length - 1; i < element.length; j = i++) {
+            const xi = (element[i][0]);
+            const yi = (element[i][1]);
+            const xj = (element[j][0]);
+            const yj = (element[j][1]);
 
-        const intersect = ((yi > y) !== (yj > y))
-          && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-        if (intersect) {
-          inside = !inside;
+            const intersect = ((yi > y) !== (yj > y))
+                && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            if (intersect) {
+                inside = !inside;
+            }
         }
-      }
-      if (inside) {
-        console.log(left, top, this.polygon[index], 'element is blocking');
-        return inside;
-      }
+        if (inside) {
+            console.log(left, top, this.polygon[index], 'element is blocking');
+            return inside;
+        }
     }
     return false;
+
+    // const x = left;
+    // const y = top;
+
+    // for (let index = 0; index < this.polygon.length; index++) {
+    //   const element = this.polygon[index].restricted_polygon;
+    //   let inside = false;
+    //   for (let i = 0, j = element.length - 1; i < element.length; j = i++) {
+    //     const xi = (element[i][0]);
+    //     const yi = (element[i][1]);
+    //     const xj = (element[j][0]);
+    //     const yj = (element[j][1]);
+
+    //     const intersect = ((yi > y) !== (yj > y))
+    //       && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+    //     if (intersect) {
+    //       inside = !inside;
+    //     }
+    //   }
+    //   if (inside) {
+    //     console.log(left, top, this.polygon[index], 'element is blocking');
+    //     return inside;
+    //   }
+    // }
+    // return false;
   }
 
   pointDistance(loc1, loc2) {
@@ -403,7 +427,7 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   render_assets() {
-    this.apiService.get('assets/location9.json').subscribe((data: any) => {
+    this.apiService.get('assets/location15.json').subscribe((data: any) => {
       for (let index = 0; index < data.length; index++) {
         const element = data[index];
 
@@ -419,24 +443,27 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
         element.left *= this.mapConfig.asset_scale;
         element.top *= this.mapConfig.asset_scale;
 
-        // let p = element['restricted_polygon']
-        if (element.restricted_polygon.length > 0) {
-          let new_items = [];
-          element.restricted_polygon.forEach((item) => {
-            let new_item = [];
-            new_item[0] = item[0] * this.mapConfig.asset_scale;
-            new_item[1] = item[1] * this.mapConfig.asset_scale;
-            new_items.push(new_item);
-          });
-
-          element.restricted_polygon = new_items;
-
-          this.polygon.push(element);
-        }
+        let p = element['restricted_polygon']
+        console.log(p.length,'polygon length')
+        for (let index = 0; index < element.restricted_polygon.length; index++) {
+            const poly = element.restricted_polygon[index];
+            if (poly.length > 0) {
+                let new_items = [];
+                poly.forEach((item) => {
+                    let new_item = [];
+                    new_item[0] = item[0] * this.mapConfig.asset_scale;
+                    new_item[1] = item[1] * this.mapConfig.asset_scale;
+                    new_items.push(new_item);
+                });
+                // element.restricted_polygon = new_items;
+                this.polygon.push(new_items);
+            }   
+        }   
         // delete element['restricted_polygon']
         this.assetCoords.push(element);
 
-      }
+    }
+
     });
   }
 
@@ -448,87 +475,14 @@ export class RoomComponent implements OnInit, AfterViewInit, OnDestroy {
     const possible_conflicts = [];
     let is_within_map_boundary = false;
 
-<<<<<<< Updated upstream
     let proposed_position: any = {};
     const handle_keys = [37, 38, 39, 40];
-=======
-    isPointInPolygon(left, top) {
-
-        const x = left;
-        const y = top;
-
-        for (let index = 0; index < this.polygon.length; index++) {
-            const element = this.polygon[index]
-            let inside = false;
-            for (let i = 0, j = element.length - 1; i < element.length; j = i++) {
-                const xi = (element[i][0]);
-                const yi = (element[i][1]);
-                const xj = (element[j][0]);
-                const yj = (element[j][1]);
-
-                const intersect = ((yi > y) !== (yj > y))
-                    && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-                if (intersect) {
-                    inside = !inside;
-                }
-            }
-            if (inside) {
-                console.log(left, top, this.polygon[index], 'element is blocking');
-                return inside;
-            }
-        }
-        return false;
-    }
->>>>>>> Stashed changes
 
     if (handle_keys.indexOf(key_code) > -1) {
       e.preventDefault();
     }
 
-<<<<<<< Updated upstream
     this.resetMapScope();
-=======
-    render_assets() {
-        this.apiService.get('assets/location15.json').subscribe((data: any) => {
-            for (let index = 0; index < data.length; index++) {
-                const element = data[index];
-
-                // if (element.image.indexOf('Fire') > -1) {
-                //     element.width = 50*this.mapConfig.scale;
-                //     element.height = 56.5*this.mapConfig.scale;
-                //     element.top -= 25*this.mapConfig.scale;
-                //     // element.left -= 10;
-                // }
-
-                element.width *= this.mapConfig.asset_scale;
-                element.height *= this.mapConfig.asset_scale;
-                element.left *= this.mapConfig.asset_scale;
-                element.top *= this.mapConfig.asset_scale;
-
-                let p = element['restricted_polygon']
-                console.log(p.length,'polygon length')
-                for (let index = 0; index < element.restricted_polygon.length; index++) {
-                    const poly = element.restricted_polygon[index];
-                    if (poly.length > 0) {
-                        let new_items = [];
-                        poly.forEach((item) => {
-                            let new_item = [];
-                            new_item[0] = item[0] * this.mapConfig.asset_scale;
-                            new_item[1] = item[1] * this.mapConfig.asset_scale;
-                            new_items.push(new_item);
-                        });
-                        // element.restricted_polygon = new_items;
-                        this.polygon.push(new_items);
-                    }   
-                }   
-                // delete element['restricted_polygon']
-                this.assetCoords.push(element);
-
-            }
-            console.log(this.assetCoords,'hello')
-        });
-    }
->>>>>>> Stashed changes
 
 
     let current_face_towards = 'right';
