@@ -1,0 +1,41 @@
+<div class="dashboard-wrapper">
+  <div class="create-space-container">
+    <div class="create-space-wrapper">
+      <div class="create-space-title">
+        Create your new space
+      </div>
+      <div class="create-space-cta-button">
+        <button class="btn btn-lg btn-primary">
+          Create space
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="my-space-container">
+    <div class="my-space-wrapper">
+      <div class="my-space-title">
+        Your Spaces
+      </div>
+      <div class="my-space-list">
+        <ng-container *ngFor="let space of userSpacesList">
+          <div class="my-space-item">
+            <div class="my-space-item-image-wrapper">
+              <img [src]="space.iconUrl" alt="">
+            </div>
+            <div class="my-space-item-tag">
+              {{space.tag}}
+            </div>
+            <div class="my-space-item-meta-info">
+                <div class="my-space-item-title">
+                  {{space.title}}
+                </div>
+                <div class="my-space-item-sub-title">
+                  {{space.caption}}
+                </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

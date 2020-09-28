@@ -10,8 +10,8 @@ $theme-name: 'deeppurple-amber';
 
 // definition. do not change here -->Start;
 $dark-mode: false;
-$primary-color: #FFF;
-$background-color: #fafafa;
+$primary-color: #ffffff;
+$background-color: #ffffff;
 // definition. do not change here --< End;
 
 // conditional variables updating only in if blocks
@@ -44,5 +44,16 @@ $background-color: #fafafa;
 // theme settings --< End
 
 
-//room settings variables
+// VARIABLES //
+$primary-color: #CE5394;
+
+
+//buttons
+$button-primary-outline: #D36067;
+$button-primary-gradient1: #D140B4;
+$button-primary-gradient2: #D83B3B;
+
+
+//room-details
 $room-setting-item-hover-bg-color: #F5DDF4
+

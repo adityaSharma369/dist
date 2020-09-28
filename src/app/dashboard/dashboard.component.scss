@@ -1,78 +1,92 @@
 @import "~src/assets/scss/common";
 
-.item {
-  background-color: $primary-color;
-  padding: 10px;
-  color: getTextColorForBackground ($primary-color);
-  margin: 5px 0px;
-}
+.dashboard-wrapper {
+  .create-space-container {
+    .create-space-wrapper {
+      max-height: 300px;
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
 
-.item-4 {
-  margin-left: 10px;
-  color: getTextColorForBackground(colorLightness($primary-color, 20));
-  background-color: colorLightness($primary-color, 20) !important;
-}
+      .create-space-title {
+        font-size: 26px;
+        margin: 20px 0;
+      }
 
-.item-2 {
-  color: getTextColorForBackground(colorDarkness($primary-color, 20));
-  background-color: colorDarkness($primary-color, 20) !important;
-}
+      .create-space-cta-button {
 
-.item-5 {
-  color: getTextColorForBackground(colorDarkness($primary-color, 30));
-  background-color: colorDarkness($primary-color, 30) !important;
-}
-
-.item-6 {
-  color: getTextColorForBackground(colorDarkness($primary-color, 40));
-  background-color: colorDarkness($primary-color, 40) !important;
-}
-
-.item-3 {
-  color: getTextColorForBackground(colorLightness($primary-color, 40));
-  background-color: colorLightness($primary-color, 40) !important;
-}
-
-
-.dashboard-item {
-  background-color: $primary-color;
-  padding: 10px;
-  text-align: center;
-  border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
-  margin-bottom: 10px;
-  @include md {
-     margin-bottom: 0px;
-  }
-  .item-icon {
-    height: 45px;
-    margin-bottom: 10px;
-    transform: scale(1.5);
-    color: getTextColorForBackground($primary-color);
-    //&.total {
-    //  color: blue;
-    //}
-    //&.present {
-    //  color: green;
-    //}
-    //&.absent {
-    //  color: yellow;
-    //}
-    //&.irregular {
-    //  color: red;
-    //}
+      }
+    }
   }
 
-  .item-value {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: getTextColorForBackground($primary-color);
-    margin-bottom: 5px;
-  }
+  .my-space-container {
+    .my-space-wrapper {
+      .my-space-title {
+        font-size: 20px;
+        margin: 20px 0;
+      }
 
-  .item-text {
-    font-size: .9rem;
-    color: getTextColorForBackground($primary-color);
-  }
+      .my-space-list {
+        display: flex;
 
+        .my-space-item {
+          position: relative;
+          margin-bottom: 45px;
+          width: calc(100% / 5);
+          margin-right: calc(100% / 5 / 3);
+          cursor: pointer;
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          .my-space-item-image-wrapper {
+            height: auto;
+            width: 250px;
+
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .my-space-item-tag {
+            position: absolute;
+            top: 20px;
+            padding: 5px 10px;
+            background: #FFFFFF;
+            border-radius: 0 14px 14px 0;
+            border: 1px solid #707070;
+            color: $primary-color;
+            font-size: 14px;
+          }
+
+          .my-space-item-meta-info {
+            position: absolute;
+            bottom: -25px;
+            background: #fff;
+            padding: 10px 20px;
+            margin: auto;
+            border-radius: 5px 5px 0 0;
+            text-align: center;
+            left: 15%;
+            right: 15%;
+            white-space: nowrap;
+
+            .my-space-item-title {
+              margin: 5px 0;
+            }
+
+            .my-space-item-sub-title {
+              font-size: 12px;
+              color: #020202;
+              opacity: 0.6;
+            }
+          }
+        }
+      }
+    }
+  }
 }

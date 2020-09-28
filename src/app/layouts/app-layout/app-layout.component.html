@@ -1,37 +1,17 @@
-<div class="" [class.browsing-in-mobile]="_common._mobileQuery.matches">
-  <mat-toolbar color="primary" class="main-header">
-    <button mat-icon-button (click)="toggleSideNav()">
-      <mat-icon>menu</mat-icon>
-    </button>
+<div class="app-layout-wrapper" [class.browsing-in-mobile]="_common._mobileQuery.matches">
+  <div class="main-header">
     <div class="branding">
-<!--      <img src="assets/images/logo.svg" />-->
       <div class="logo"></div>
     </div>
     <span class="toolbar-spacer"></span>
-    <button [matMenuTriggerFor]="userState" mat-flat-button color="primary" class="user-menu-trigger" *ngIf="_common._auth.isAuthenticated()">
-      <span class="hide-in-mobile">{{_common._auth.user?.first_name}}</span>
-      <span class="show-in-mobile"><mat-icon>person</mat-icon></span>
-      <mat-icon>arrow_drop_down</mat-icon>
-    </button>
-    <mat-menu #userState="matMenu" xPosition="before">
-      <button mat-menu-item routerLink="/profile">
-        <mat-icon>account_box</mat-icon>
-        Profile
-      </button>
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>exit_to_app</mat-icon>
-        Sign Out
-      </button>
-    </mat-menu>
-  </mat-toolbar>
-  <mat-sidenav-container class="main-page-container" autosize>
-    <mat-sidenav #sidenav [opened]="!_common._mobileQuery.matches"
-                 [mode]="_common._mobileQuery.matches ? 'over' : 'side'"
-                 [fixedInViewport]="_common._mobileQuery.matches" fixedTopGap="56" class="page-sidenav">
-      <ts-menu-items></ts-menu-items>
-    </mat-sidenav>
-    <mat-sidenav-content class="page-content">
+    <div class="header-options">
+      <div class="help-cta"> Need help ? </div>&nbsp;
+      <button class="btn btn-outline-primary">Sign in</button>
+    </div>
+  </div>
+  <div class="main-page-container">
+    <div class="page-content">
       <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+    </div>
+  </div>
 </div>

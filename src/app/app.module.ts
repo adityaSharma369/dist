@@ -17,7 +17,6 @@ import {AlertService} from './shared/services/alert.service';
 import {MenuItemsService} from './shared/services/menu-items.service';
 
 import {SharedModule} from './shared/shared.module';
-import {AppThemeModule} from './layouts/app-layout/app-theme/app-theme.module';
 
 import {AppLayoutComponent} from './layouts/app-layout/app-layout.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
@@ -38,8 +37,7 @@ import {SocketService} from './shared/services/socket.service';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    SharedModule,
-    AppThemeModule
+    SharedModule
   ],
   providers: [
     // App Services

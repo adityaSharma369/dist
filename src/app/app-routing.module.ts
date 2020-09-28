@@ -3,23 +3,25 @@ import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {RoomComponent} from './room/room.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
+import {AuthLayoutComponent} from './layouts/auth-layout/auth-layout.component';
+import {NonAuthGuard} from './shared/guards/non-auth.guard';
+import {AppLayoutComponent} from './layouts/app-layout/app-layout.component';
+import {AuthGuard} from './shared/guards/auth.guard';
 
 const routes: Routes = [
-  // {
-  //   path: '', component: AppLayoutComponent, canActivate: [AuthGuard], children: [
-  //     {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
-  //     {path: 'dashboard', component: DashboardComponent},
-  //     {path: '', loadChildren: () => import('./app-inner/app-inner.module').then(m => m.AppInnerModule)},
-  //   ]
-  // },
-  // {
-  //   path: '', component: AuthLayoutComponent, canActivate: [NonAuthGuard], children: [
-  //     {path: '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)},
-  //   ]
-  // },
-  {path: 'dashboard', component: DashboardComponent},
+  {
+    path: '', component: AppLayoutComponent, canActivate: [AuthGuard], children: [
+      {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
+      {path: 'dashboard', component: DashboardComponent},
+      {path: '', loadChildren: () => import('./app-inner/app-inner.module').then(m => m.AppInnerModule)},
+    ]
+  },
+  {
+    path: '', component: AuthLayoutComponent, canActivate: [NonAuthGuard], children: [
+      {path: '', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)},
+    ]
+  },
   {path: 'room/:roomId/:roomTitle', component: RoomComponent},
-  {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
   {path: 'not-found', component: NotFoundComponent},
   {path: '**', redirectTo: '/not-found'}
 ];

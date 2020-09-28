@@ -2,6 +2,8 @@
 @import "common";
 // global include variables
 @import "responsive_display";
+@import "components/buttons";
+
 // responsive display classes
 @import "helpers"; // width, height, margin, padding helper classes
 
@@ -45,6 +47,7 @@ body {
 }
 
 
+
 .hide-in-mobile {
   display: none;
   @include md {
@@ -69,6 +72,18 @@ body {
   }
 }
 
+.main-header {
+  display: flex;
+  box-sizing: border-box;
+  padding: 0 100px;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  height: 80px;
+  margin: auto;
+}
+
 .toolbar-spacer {
   flex: 1 1 auto;
 }
@@ -76,15 +91,31 @@ body {
 .main-header .logo {
   width: 120px;
   height: 40px;
-  margin: 0px 10px;
+  margin: 0 10px;
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
-  background-image: url(/assets/images/logo.svg) !important;
+  background-image: url(/assets/images/logo/logo-dark.svg) !important;
   @include md {
     //width: 160px;
   }
 }
+
+.header-options {
+  display: flex;
+  align-items: center;
+}
+
+.help-cta {
+  color: #020202;
+  font-size: 18px;
+  margin: 0 20px;
+}
+
+.main-page-container {
+  padding: 0 100px;
+}
+
 
 .page-content {
   height: calc(100vh - 56px) !important;
