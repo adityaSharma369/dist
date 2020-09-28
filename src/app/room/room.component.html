@@ -44,11 +44,11 @@
             <img src="assets/images/map_assets/{{asset.image}}">
         </div>
 
-<!--        <div *ngFor="let area of polygon">-->
-<!--            <div *ngFor="let dot of area.restricted_polygon"-->
-<!--                 [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red'}">-->
-<!--            </div>-->
-<!--        </div>-->
+       <div *ngFor="let area of polygon">
+           <div *ngFor="let dot of area"
+                [ngStyle]="{'top':dot[1]+'px','left':dot[0]+'px','position':'absolute','border':'2px solid red','z-index':20}">
+           </div>
+       </div>
 
     </div>
 
