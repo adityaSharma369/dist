@@ -1,16 +1,28 @@
-<div class="container auth-layout-wrapper"
-     fxLayout
-     fxLayout.xs="column"
-     fxLayoutAlign="center"
-     fxLayoutGap="10px">
-  <div fxFlex fxFlex.sm="0px">&nbsp;</div>
-  <div fxFlex="430px" align="center">
-    <mat-card class="main-auth-holder">
-      <div class="logo">
-        <img src="assets/images/logo.svg" />
-      </div>
-      <router-outlet></router-outlet>
-    </mat-card>
+<div class="container auth-layout-wrapper" [class.browsing-in-mobile]="_common._mobileQuery.matches">
+  <div class="main-header">
+    <div class="branding">
+      <a routerLink="/">
+        <div class="logo"></div>
+      </a>
+    </div>
+    <span class="toolbar-spacer"></span>
+    <div class="header-options">
+      <div class="help-cta"> Need help ?</div>
+    </div>
   </div>
-  <div fxFlex fxFlex.sm="0px">&nbsp;</div>
+  <div class="main-page-container">
+    <div class="page-content">
+      <div
+        class="height-100"
+        fxLayout
+        fxLayout.xs="column"
+        fxLayoutAlign="center center">
+        <div fxFlex fxFlex.sm="0px">&nbsp;</div>
+        <div fxFlex align="center">
+          <router-outlet></router-outlet>
+        </div>
+        <div fxFlex fxFlex.sm="0px">&nbsp;</div>
+      </div>
+      </div>
+  </div>
 </div>

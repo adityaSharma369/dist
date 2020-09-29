@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {CommonService} from '../../shared/services/common.service';
 
 @Component({
   selector: 'ts-auth-layout',
@@ -7,7 +8,9 @@ import {Component, OnInit} from '@angular/core';
 })
 export class AuthLayoutComponent implements OnInit {
 
-  constructor() {
+  constructor(
+    public _common: CommonService
+  ) {
   }
 
   ngOnInit() {

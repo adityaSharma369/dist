@@ -1,12 +1,16 @@
 <div class="app-layout-wrapper" [class.browsing-in-mobile]="_common._mobileQuery.matches">
   <div class="main-header">
     <div class="branding">
-      <div class="logo"></div>
+      <a routerLink="/">
+        <div class="logo"></div>
+      </a>
     </div>
     <span class="toolbar-spacer"></span>
     <div class="header-options">
       <div class="help-cta"> Need help ? </div>&nbsp;
-      <button class="btn btn-outline-primary">Sign in</button>
+      <a [routerLink]="'/login'">
+        <button class="btn btn-outline-primary">Sign in</button>
+      </a>
     </div>
   </div>
   <div class="main-page-container">

@@ -2,7 +2,6 @@
 @import "common";
 // global include variables
 @import "responsive_display";
-@import "components/buttons";
 
 // responsive display classes
 @import "helpers"; // width, height, margin, padding helper classes
@@ -23,8 +22,13 @@
   @import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
 }
 
-/// @if $theme-name == 'teric-blue' uncomment bellow line
-//@import "./custom-theme";
+/// @if $theme-name == 'zappy' uncomment bellow line
+@import "./custom-theme";
+
+
+//imports
+@import "components/buttons";
+@import "components/form";
 
 html, body {
   height: 100%;
@@ -91,7 +95,7 @@ body {
 .main-header .logo {
   width: 120px;
   height: 40px;
-  margin: 0 10px;
+  margin-right: 10px;
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
@@ -196,15 +200,6 @@ body {
     padding: 20px;
   }
 
-  .logo {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid colorDarkness($background-color, 5);
-
-    img {
-      max-height: 100%;
-    }
-  }
 }
 
 .img-responsive {

@@ -24,6 +24,7 @@ import {AuthLayoutComponent} from './layouts/auth-layout/auth-layout.component';
 import {TwilioService} from './shared/services/twilio.service';
 import {RoomComponent} from './room/room.component';
 import {SocketService} from './shared/services/socket.service';
+import { SpaceCreateComponent } from './space/space-create/space-create.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import {SocketService} from './shared/services/socket.service';
     AuthLayoutComponent,
     DashboardComponent,
     RoomComponent,
+    SpaceCreateComponent,
   ],
   imports: [
     BrowserModule,

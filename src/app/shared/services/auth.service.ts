@@ -6,7 +6,6 @@ import {Injectable} from '@angular/core';
 export class AuthService {
   user: any;
   token: string;
-  // aclModules = [];
 
   constructor() {
     const user = window.localStorage.getItem('currentUser');
@@ -22,6 +21,10 @@ export class AuthService {
     return window.localStorage.getItem('token');
   }
 
+  public getTempUserId(): string {
+    return window.localStorage.getItem('tmp_user_id');
+  }
+
   public isAuthenticated(): boolean {
     return !!this.token;
   }
@@ -31,29 +34,13 @@ export class AuthService {
     localStorage.setItem('currentUser', JSON.stringify(data.user));
     this.token = data.token;
     this.user = data.user;
-    // this.aclModules = data.modules;
   }
-
-  // isManager() {
-  //   return this.user.role === 'manager';
-  // }
-  //
-  // isDataScientist() {
-  //   return this.user.role === 'datascientist';
-  // }
-  //
-  // isAnnotator() {
-  //   return this.user.role === 'annotator';
-  // }
-  //
-  // isAdmin() {
-  //   return this.user.role === 'admin';
-  // }
 
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('temp_user_id');
     delete this.user;
     delete this.token;
   }

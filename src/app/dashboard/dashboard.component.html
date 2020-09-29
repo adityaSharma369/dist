@@ -5,9 +5,11 @@
         Create your new space
       </div>
       <div class="create-space-cta-button">
-        <button class="btn btn-lg btn-primary">
-          Create space
-        </button>
+        <a [routerLink]="'/space/create'">
+          <button class="btn btn-lg btn-primary">
+            Create space
+          </button>
+        </a>
       </div>
     </div>
   </div>
@@ -16,22 +18,22 @@
       <div class="my-space-title">
         Your Spaces
       </div>
-      <div class="my-space-list">
+      <div class="map-thumbnail-list">
         <ng-container *ngFor="let space of userSpacesList">
-          <div class="my-space-item">
-            <div class="my-space-item-image-wrapper">
-              <img [src]="space.iconUrl" alt="">
+          <div class="map-thumbnail-item">
+            <div class="map-thumbnail-item-image-wrapper">
+              <div class="map-thumbnail-item-image" [style.background-image]="'url(' + space.iconUrl +')'"></div>
             </div>
-            <div class="my-space-item-tag">
+            <div class="map-thumbnail-item-tag">
               {{space.tag}}
             </div>
-            <div class="my-space-item-meta-info">
-                <div class="my-space-item-title">
-                  {{space.title}}
-                </div>
-                <div class="my-space-item-sub-title">
-                  {{space.caption}}
-                </div>
+            <div class="map-thumbnail-item-meta-info">
+              <div class="map-thumbnail-item-title">
+                {{space.title}}
+              </div>
+              <div class="map-thumbnail-item-sub-title">
+                {{space.caption}}
+              </div>
             </div>
           </div>
         </ng-container>

@@ -1,14 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonService} from '../shared/services/common.service';
-
-export interface UserSpace {
-  title: string;
-  iconUrl: string;
-  roomId: string;
-  roomTitle: string;
-  tag: string;
-  caption: string;
-}
+import {MapThumbnailItem} from '../shared/interfaces/map-thumbnail-item';
+import {v4 as uuid} from 'uuid';
 
 @Component({
   selector: 'ts-dashboard',
@@ -18,9 +11,10 @@ export interface UserSpace {
 
 export class DashboardComponent implements OnInit {
 
-  userSpacesList: UserSpace[];
+  userSpacesList: MapThumbnailItem[];
   constructor(private _common: CommonService) {
-    // this._common._router.navigate(['room', '5f6a08172d5b0a00131fafd5', 'zappy_test']);
+    const tempUuid = uuid();
+    localStorage.setItem('tmp_user_id', tempUuid);
   }
 
   ngOnInit() {
@@ -28,7 +22,7 @@ export class DashboardComponent implements OnInit {
       {
         title: 'Park',
         iconUrl: 'assets/images/user-spaces/park.png',
-        roomId: '1',
+        _id: '1',
         roomTitle: 'park',
         tag: 'Family',
         caption: 'Upto 100 users',
@@ -36,7 +30,7 @@ export class DashboardComponent implements OnInit {
       {
         title: 'Concert',
         iconUrl: 'assets/images/user-spaces/concert.png',
-        roomId: '2',
+        _id: '2',
         roomTitle: 'concert',
         tag: 'Friends',
         caption: 'Upto 100 users',
@@ -44,7 +38,7 @@ export class DashboardComponent implements OnInit {
       {
         title: 'Park',
         iconUrl: 'assets/images/user-spaces/park.png',
-        roomId: '3',
+        _id: '3',
         roomTitle: 'park',
         tag: 'Sports bar',
         caption: 'Upto 100 users',
@@ -52,7 +46,7 @@ export class DashboardComponent implements OnInit {
       {
         title: 'Family Session',
         iconUrl: 'assets/images/user-spaces/park.png',
-        roomId: '4',
+        _id: '4',
         roomTitle: 'park',
         tag: 'Family',
         caption: 'Upto 100 users',

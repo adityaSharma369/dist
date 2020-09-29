@@ -6,13 +6,14 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {AuthLayoutComponent} from './layouts/auth-layout/auth-layout.component';
 import {NonAuthGuard} from './shared/guards/non-auth.guard';
 import {AppLayoutComponent} from './layouts/app-layout/app-layout.component';
-import {AuthGuard} from './shared/guards/auth.guard';
+import {SpaceCreateComponent} from './space/space-create/space-create.component';
 
 const routes: Routes = [
   {
-    path: '', component: AppLayoutComponent, canActivate: [AuthGuard], children: [
+    path: '', component: AppLayoutComponent, children: [
       {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
       {path: 'dashboard', component: DashboardComponent},
+      {path: 'space/create', component: SpaceCreateComponent},
       {path: '', loadChildren: () => import('./app-inner/app-inner.module').then(m => m.AppInnerModule)},
     ]
   },

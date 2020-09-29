@@ -2,7 +2,9 @@
 // responsive mixins for global use
 @import "mixins"; // Color mixins for global use
 
-$theme-name: 'deeppurple-amber';
+$theme-name: 'zappy-theme';
+
+//$theme-name: 'deeppurple-amber';
 //$theme-name: 'pink-bluegrey';
 // Available themes
 // Light Mode --> deeppurple-amber | indigo-pink
@@ -36,17 +38,16 @@ $background-color: #ffffff;
   $dark-mode: true;
 }
 
-@if ($theme-name == 'teric-blue') {
-  $primary-color: #4caf50; // #48a1FF;
+@if ($theme-name == 'zappy-theme') {
+  $primary-color: #CE5394; // #48a1FF;
   $dark-mode: false;
 }
+
 
 // theme settings --< End
 
 
 // VARIABLES //
-$primary-color: #CE5394;
-
 
 //buttons
 $button-primary-outline: #D36067;

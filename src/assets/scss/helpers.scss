@@ -1,8 +1,13 @@
 // padding, margin, width, height helpers --> Start
-$sizes: (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 75, 80, 85, 90, 95, 100); // Adjust this to include the pixel amounts you need.
+$sizes: (0, 5, 10, 12, 14, 15, 16, 18, 20, 22, 25, 30, 35, 40, 45, 50, 55, 60, 70, 75, 80, 85, 90, 95, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200); // Adjust this to include the pixel amounts you need.
 $sides: (top, bottom, left, right); // Leave this variable alone
 
 @each $space in $sizes {
+
+  .font-size-#{$space} {
+    font-size: #{$space}+ 'px';
+  }
+
   // in percentage // usage .height-{percentage}
   .height-#{$space} {
     height: #{$space}+ '%';
