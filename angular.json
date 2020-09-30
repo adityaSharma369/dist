@@ -128,5 +128,8 @@
       }
     }
   },
-  "defaultProject": "Angular-8-Starter"
+  "defaultProject": "Angular-8-Starter",
+  "cli": {
+    "analytics": "80cc38d5-1ab0-4824-a5a7-b0477f3c13d6"
+  }
 }
